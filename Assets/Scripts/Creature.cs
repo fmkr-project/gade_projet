@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 public class Creature
@@ -6,7 +7,8 @@ public class Creature
     
     // Stats
     public int Level; // pour l'instant pas de système d'xp
-    public int Hp;
+    public int CurrentHp;
+    public int MaxHp;
     public int Attack;
     public int Defense;
     public int Speed;
@@ -17,22 +19,12 @@ public class Creature
 
     private void ModifyHp(int hp)
     {
-        Hp += hp;
-    }
-
-    public void LoseHp(int hp)
-    {
-        ModifyHp(-hp);
-    }
-
-    public void GainHp(int hp)
-    {
-        ModifyHp(hp);
+        CurrentHp = Math.Min(CurrentHp + hp, MaxHp);
     }
 
     public bool IsDead()
     {
-        return Hp <= 0;
+        return CurrentHp <= 0;
     }
     
     // Attacks related
@@ -48,11 +40,26 @@ public class Creature
 
         var lostHp = (int) (baseDamage * effectiveness * stab);
 
-        LoseHp(lostHp);
+        ModifyHp(-lostHp);
         if (IsDead())
         {
             // todo
         }
+    }
+
+    public void Heal(HealingItem potion)
+    {
+        ModifyHp(potion.HealedHp);
+    }
+
+    public float GetModifiedCatchRate(CaptureOrb ball)
+    // Cf Bulbapedia
+    {
+        var baseValue = 1 - 2 * CurrentHp / 3 / MaxHp;
+        var creatureCatchRate = 1f; // TODO plusieurs valeurs
+        var ballBonus = ball.CaptureMultiplier;
+
+        return baseValue * creatureCatchRate * ballBonus;
     }
 
 }
