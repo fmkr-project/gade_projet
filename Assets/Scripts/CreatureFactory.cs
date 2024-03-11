@@ -19,13 +19,11 @@ class ConcreteCreatureFactory : CreatureFactory
     {
         // Get creature base data
         // TODO make this more efficient
-        switch (id)
+        _data = id switch
         {
-            case 1: _data = new C001();
-                break;
-            default: _data = new C000();
-                break;
-        }
+            1 => new C001(),
+            _ => new C000()
+        };
         
         // Get individual stats
         var final = new Creature

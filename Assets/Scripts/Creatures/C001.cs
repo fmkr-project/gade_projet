@@ -5,15 +5,17 @@ namespace Creatures
 {
     public class C001 : BaseCreatureData
     {
-        public new int Id = 1;
-        public new string Nickname = "feur";
-        public new GameObject BattleSprite;
+        public C001()
+        {
+            Id = 1;
+            Nickname = "feur";
 
-        public new int Hp = 10;
-        public new int Attack = 55;
-        public new int Defense = 25;
-        public new int Speed = 95;
+            Hp = 10;
+            Attack = 55;
+            Defense = 25;
+            Speed = 95;
 
-        public new List<Type> Types = new List<Type> {Type.Fire};
+            Types = new List<Type> {Type.Fire};
+        }
     }
 }
