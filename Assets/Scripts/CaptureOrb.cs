@@ -6,7 +6,7 @@ using Random = System.Random;
 public class CaptureOrb : Item
 {
     public float CaptureMultiplier;
-
+    
     public bool TryCapture(Creature enemy)
     {
         // Cf Bulbapedia for the details

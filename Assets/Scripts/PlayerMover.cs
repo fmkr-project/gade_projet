@@ -5,14 +5,14 @@ using UnityEngine.AI;
 
 public class PlayerMover : MonoBehaviour
 {
-    [SerializeField] private float walkingSpeed = 3f;
+    [SerializeField] private float walkingSpeed = 10f;
 
     private NavMeshAgent _agent;
     
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        _agent = GetComponent<NavMeshAgent>();
     }
 
     // Update is called once per frame
@@ -24,6 +24,6 @@ public class PlayerMover : MonoBehaviour
 
         var displacement = (Vector3.forward * verticalMove + Vector3.right * horizontalMove)
                            * (deltaTime * walkingSpeed);
-        
+        _agent.SetDestination(transform.position + displacement);
     }
 }
