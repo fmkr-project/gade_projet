@@ -1,4 +1,7 @@
 using System;
+using System.Collections;
+using UnityEngine;
+using Random = System.Random;
 
 public class CaptureOrb : Item
 {
@@ -19,6 +22,7 @@ public class CaptureOrb : Item
                 // TODO animate shakes (1 check passed = 1 shake, etc.)
                 return false;
             }
+            System.Threading.Thread.Sleep(800); // Visual wait
         }
         
         // Capture success
