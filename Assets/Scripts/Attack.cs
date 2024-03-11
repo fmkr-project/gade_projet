@@ -1,4 +1,4 @@
-public class Attack
+public abstract class Attack
 {
     public string Name;
     public Type Type;

@@ -1,20 +1,22 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class Creature
 {
-    public string Name;
+    public int Id;
+    public string Nickname;
     
     // Stats
     public int Level; // pour l'instant pas de système d'xp
-    public int CurrentHp;
     public int MaxHp;
+    public int CurrentHp;
     public int Attack;
     public int Defense;
     public int Speed;
     public List<Type> Types;
     public List<Attack> Attacks;
-
+    
     // todo IV / EV ?
 
     private void ModifyHp(int hp)
