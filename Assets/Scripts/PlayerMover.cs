@@ -5,7 +5,8 @@ using UnityEngine.AI;
 
 public class PlayerMover : MonoBehaviour
 {
-    [SerializeField] private float walkingSpeed = 10f;
+    [SerializeField] private float walkingSpeed = 20f;
+    [SerializeField] private float sprintSpeed = 45f;
 
     private NavMeshAgent _agent;
     
@@ -22,8 +23,10 @@ public class PlayerMover : MonoBehaviour
         var horizontalMove = Input.GetAxis("Horizontal");
         var verticalMove = Input.GetAxis("Vertical");
 
+        var finalSpeed = Input.GetAxis("Sprint") != 0 ? sprintSpeed : walkingSpeed;
+
         var displacement = (Vector3.forward * verticalMove + Vector3.right * horizontalMove)
-                           * (deltaTime * walkingSpeed);
+                           * (deltaTime * finalSpeed);
         _agent.SetDestination(transform.position + displacement);
     }
 }
