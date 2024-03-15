@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Debug : MonoBehaviour
+public class GameDebug : MonoBehaviour
 {
     private ConcreteCreatureFactory _factory;
 

@@ -43,10 +43,24 @@ public class Creature
         var lostHp = (int) (baseDamage * effectiveness * stab);
 
         ModifyHp(-lostHp);
-        if (IsDead())
+        if (this.IsDead())
         {
             // todo
         }
+    }
+
+    public void SendAttack(Attack attack, Creature enemy)
+        // Compute if an attack hits an enemy
+        // Cf Bulbapedia
+    {
+        var finalAccuracy = attack.Accuracy; // TODO modifiers
+
+        var value = UnityEngine.Random.Range(1, 100);
+        if (value <= finalAccuracy) // hit
+        {
+            enemy.ReceiveAttack(attack, this);
+        }
+        // TODO else miss
     }
 
     public void Heal(HealingItem potion)

@@ -13,7 +13,7 @@ public class TypeChart
 // Documents weaknesses and resistances of types
 // List can be empty
 {
-    public Dictionary<Type, List<Type>> WeakAgainst
+    public readonly Dictionary<Type, List<Type>> WeakAgainst
         = new Dictionary<Type, List<Type>>()
         {
             {Type.NeutralType, new List<Type>()},
@@ -23,7 +23,7 @@ public class TypeChart
             {Type.Grass, new List<Type> {Type.Fire}}
         };
 
-    public Dictionary<Type, List<Type>> StrongAgainst
+    public readonly Dictionary<Type, List<Type>> StrongAgainst
         = new Dictionary<Type, List<Type>>()
         {
             {Type.NeutralType, new List<Type>()},
@@ -33,7 +33,7 @@ public class TypeChart
             {Type.Grass, new List<Type> {Type.Grass}}
         };
 
-    public Dictionary<Type, List<Type>> ImmuneAgainst
+    public readonly Dictionary<Type, List<Type>> ImmuneAgainst
         = new Dictionary<Type, List<Type>>()
         {
             {Type.NeutralType, new List<Type>()},
