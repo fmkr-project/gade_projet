@@ -1,6 +1,11 @@
+using System;
+
 public class HealingItem : Item
 {
     public int HealedHp;
-    
-    //public override void Use()
+
+    public override bool Use()
+    {
+        return false;
+    }
 }
