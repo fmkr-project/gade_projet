@@ -20,7 +20,9 @@ namespace UI
             {
                 _lateralMenu.ToggleMenu();
             }
-            // TODO fx
+            
+            // Update screen
+            _lateralMenu.gameObject.SetActive(_lateralMenu.open);
         }
     }
 }
