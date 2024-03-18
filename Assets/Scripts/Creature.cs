@@ -3,18 +3,19 @@ using System.Collections.Generic;
 
 public class Creature
 {
-    public string Name;
+    public int Id;
+    public string Nickname;
     
     // Stats
     public int Level; // pour l'instant pas de système d'xp
-    public int CurrentHp;
     public int MaxHp;
+    public int CurrentHp;
     public int Attack;
     public int Defense;
     public int Speed;
     public List<Type> Types;
     public List<Attack> Attacks;
-
+    
     // todo IV / EV ?
 
     private void ModifyHp(int hp)
@@ -41,10 +42,24 @@ public class Creature
         var lostHp = (int) (baseDamage * effectiveness * stab);
 
         ModifyHp(-lostHp);
-        if (IsDead())
+        if (this.IsDead())
         {
             // todo
         }
+    }
+
+    public void SendAttack(Attack attack, Creature enemy)
+        // Compute if an attack hits an enemy
+        // Cf Bulbapedia
+    {
+        var finalAccuracy = attack.Accuracy; // TODO modifiers
+
+        var value = UnityEngine.Random.Range(1, 100);
+        if (value <= finalAccuracy) // hit
+        {
+            enemy.ReceiveAttack(attack, this);
+        }
+        // TODO else miss
     }
 
     public void Heal(HealingItem potion)

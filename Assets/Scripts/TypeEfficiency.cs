@@ -30,7 +30,7 @@ public class TypeEfficiency
             case Efficiency.NoEffect: return 0f;
             default:
             {
-                Debug.LogWarning("WARNING: efficiency is unknown");
+                UnityEngine.Debug.LogWarning("WARNING: efficiency is unknown");
                 return 1f;
             }
         }

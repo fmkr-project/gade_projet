@@ -6,6 +6,11 @@ using Random = System.Random;
 public class CaptureOrb : Item
 {
     public float CaptureMultiplier;
+
+    public override bool Use()
+    {
+        return false;
+    }
     
     public bool TryCapture(Creature enemy)
     {
