@@ -4,33 +4,44 @@ using UnityEngine.SceneManagement;
 
 public class SceneTransition : MonoBehaviour
 {
-    public float fadeDuration = 1.5f; 
+    public float fadeDuration = 1.5f;
     public string nextSceneName = "NouvelleScene"; 
-
+    public Light directionalLight;
+    public bool isMovable = true;
+    
     private void OnTriggerEnter(Collider other)
     {
-        StartCoroutine(FadeToBlackAndLoadScene());
+        if (other.CompareTag("Trigger"))
+        {
+            Debug.Log("yo");
+        
+            if (directionalLight == null)
+            {
+                directionalLight = GameObject.FindObjectOfType<Light>(); 
+            }
+
+            isMovable = false;
+            StartCoroutine(FadeLightAndLoadScene());
+        }
+        
     }
 
-    private IEnumerator FadeToBlackAndLoadScene()
+    private IEnumerator FadeLightAndLoadScene()
     {
-        
-        GameObject canvasObject = new GameObject("FadingCanvas");
-        CanvasGroup canvasGroup = canvasObject.AddComponent<CanvasGroup>();
-        canvasGroup.alpha = 0f;
+        float initialIntensity = directionalLight.intensity;
+        float timer = 0f;
 
-       
-        RectTransform rectTransform = canvasObject.GetComponent<RectTransform>();
-        rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
-
-      
-        while (canvasGroup.alpha < 1f)
+        while (timer < fadeDuration)
         {
-            canvasGroup.alpha += Time.deltaTime / fadeDuration;
+            
+            float t = timer / fadeDuration;
+            directionalLight.intensity = Mathf.Lerp(initialIntensity, 0f, t);
+
+            timer += Time.deltaTime;
             yield return null;
         }
 
-        // Charger la nouvelle scène
+        
         SceneManager.LoadScene(nextSceneName);
     }
 }
