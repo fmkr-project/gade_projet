@@ -9,31 +9,36 @@ namespace UI
     {
         private Bag _bag;
         private int _maxPrintableItems;
-        private List<GameObject> _textGameObjects;
-        
-        private new void Awake()
+        private List<GameObject> _textGameObjects = new();
+
+        private Player _player;
+
+        private void Start()
         {
-            base.Awake();
-            var player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-            _bag = player.Bag;
-
-            if (choices.Count <= 0)
-                // Initialize item list
+            _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+            _bag = _player.Bag;
+        }
+        
+        public void Redraw()
+        // Redraw when the player uses an item
+        {
+            if (choices.Count > 0) choices.Clear();
+            // Initialize item list
+            foreach (var pair in _bag.Contents)
             {
-                foreach (var pair in _bag.Contents)
-                {
-                    choices.Add($"{pair.Key.Name} (x{pair.Value})"); // TODO key items
-                }
-                choices.Add("QUITTER");
+                choices.Add($"{pair.Key} (x{pair.Value})"); // TODO key items
             }
+            choices.Add("QUITTER");
 
+            // Destroy existing text
             if (_textGameObjects.Count > 0)
-                // Destroy existing text
             {
                 foreach (var tObject in _textGameObjects)
                 {
                     Destroy(tObject);
                 }
+
+                _textGameObjects.Clear();
             }
             
             // TODO pages
@@ -44,6 +49,7 @@ namespace UI
             foreach (var text in choices)
             {
                 var newTextObject = Instantiate(textObject, items).gameObject;
+                _textGameObjects.Add(newTextObject);
                 var newText = newTextObject.GetComponent<TextMeshProUGUI>();
                 newText.text = text;
                 newTextObject.SetActive(true);
@@ -51,11 +57,6 @@ namespace UI
             
             
 
-        }
-
-        private void Redraw()
-        {
-            Awake();
         }
     }
 }

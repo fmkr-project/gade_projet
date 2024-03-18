@@ -11,7 +11,7 @@ namespace UI
         private new void Awake()
         {
             base.Awake();
-            choices = new List<string> {"SAC", "SAUVER", "FEUR"};
+            choices = new List<string> {"SAC", "SAUVER", "FEUR", "QUITTER"};
             
             // Get separation between text items
             var items = transform.Find("LateralMenuItems");

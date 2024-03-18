@@ -2,9 +2,9 @@ namespace Objects
 {
     public class BetterOrb : CaptureOrb
     {
-        public new string Name = "dezohiezgnyujuoezolip";
         public BetterOrb()
         {
+            Name = "fjeoifjoierjfoczekp";
             CaptureMultiplier = 1.5f;
         }
     }
