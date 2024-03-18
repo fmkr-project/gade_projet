@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -235,7 +235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84f85cab51fa6a74ba815146dfe5ce0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 2220344208573344806, guid: a4ce354350dbcf24a86704ea40f13274, type: 3}
+  prefab: {fileID: 4039561870206277597, guid: 0ddaa8d4bda4dba41aa930148e36aaff, type: 3}
   spawnpoint: {fileID: 1884539314}
   player: {fileID: 1660114102}
 --- !u!4 &491696210
@@ -246,13 +246,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 491696208}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.00068629236, y: 0.00018088114, z: -0.00089869346, w: 0.9999994}
   m_LocalPosition: {x: 67.958115, y: -21.425982, z: 81.708145}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -0.079, y: 0.021, z: -0.103}
 --- !u!1 &700734389
 GameObject:
   m_ObjectHideFlags: 0
@@ -1340,10 +1340,10 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 100
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 180
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -1418,10 +1418,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25876a89023a0ee42ae453932dbe4b2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fadeDuration: 1
+  fadeDuration: 2.5
   nextSceneName: BattleScene
   directionalLight: {fileID: 0}
-  isfighting: 0
+  isMovable: 1
 --- !u!65 &1660114109
 BoxCollider:
   m_ObjectHideFlags: 0
