@@ -8,7 +8,7 @@ namespace Creatures
         public C001()
         {
             Id = 1;
-            Nickname = "feur";
+            Nickname = "CYLINDRE";
 
             Hp = 10;
             Attack = 55;

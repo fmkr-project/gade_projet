@@ -22,6 +22,10 @@ class ConcreteCreatureFactory : CreatureFactory
         _data = id switch
         {
             1 => new C001(),
+            
+            6 => new C006(),
+            7 => new C007(),
+            
             _ => new C000()
         };
         
