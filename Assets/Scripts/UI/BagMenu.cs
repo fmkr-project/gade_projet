@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,7 +9,7 @@ namespace UI
 {
     public class BagMenu : UpDownMenu
     {
-        private Bag _bag;
+        public Bag Bag;
         private int _maxPrintableItems;
         private List<GameObject> _textGameObjects = new();
 
@@ -16,7 +18,7 @@ namespace UI
         private void Start()
         {
             _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-            _bag = _player.Bag;
+            Bag = _player.Bag;
         }
         
         public void Redraw()
@@ -24,7 +26,7 @@ namespace UI
         {
             if (choices.Count > 0) choices.Clear();
             // Initialize item list
-            foreach (var pair in _bag.Contents)
+            foreach (var pair in Bag.Contents)
             {
                 choices.Add($"{pair.Key} (x{pair.Value})"); // TODO key items
             }
@@ -57,6 +59,16 @@ namespace UI
             
             
 
+        }
+
+        public string GetSelectedItemName()
+        {
+            var choice = GetChoice();
+            
+            // Remove item amount
+            var splitted = choice.Split(' ').ToList();
+            splitted.RemoveAt(splitted.Count-1);
+            return String.Join(" ", splitted);
         }
     }
 }

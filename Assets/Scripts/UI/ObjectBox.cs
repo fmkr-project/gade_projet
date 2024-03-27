@@ -1,22 +1,22 @@
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 namespace UI
 {
-    public class YesNoBox : UpDownMenu
+    public class ObjectBox : UpDownMenu
     // Choice boxes
     {
         private List<GameObject> _textGameObjects = new();
-        [NonSerialized] public bool Result = true;
         
         public void Redraw()
+        // TODO put this in UpDownMenu
         {
             if (choices.Count > 0) choices.Clear();
             
-            choices.Add("OUI");
-            choices.Add("NON");
+            choices.Add("UTILISER");
+            choices.Add("JETER");
+            choices.Add("RETOUR");
             
             // Destroy existing text
             if (_textGameObjects.Count > 0)
