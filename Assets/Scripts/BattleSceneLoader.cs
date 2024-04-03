@@ -12,15 +12,26 @@ public class BattleSceneLoader : MonoBehaviour
 
     private GameObject _enemyObject;
 
-    private void Start()
+    private int _spawnedId = 6; // TODO change this
+
+    private void Awake()
     {
-        var prefab = new CreaturePrefabLoader().GetPrefabFromId(6);
+        var prefab = new CreaturePrefabLoader().GetPrefabFromId(_spawnedId);
         
         var spawnTime = 0.6f; // temp, TODO do a cleaner version of this
         _enemyObject = (GameObject) Instantiate(prefab, enemyBase.position,
             Quaternion.Euler(0, 180, 0));
         
-        // Initial scale is 0
+        // Transfer the info to the supervisor
+        var supervisor = transform.Find("/BattleSupervisor").GetComponent<BattleSupervisor>();
+        
+        // TODO Use player's team instead of a random fella
+        supervisor.PlayerMon = new ConcreteCreatureFactory().GenerateCreature(1, 10);
+        // TODO also change this
+        supervisor.EnemyMon = new ConcreteCreatureFactory().GenerateCreature(_spawnedId, 10); // TODO levels
+        
+        // Graphics
+        // Initial enemy scale is 0
         _enemyObject.transform.localScale = Vector3.zero;
         
         SceneManager.sceneLoaded += OnSceneLoaded;

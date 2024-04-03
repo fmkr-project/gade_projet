@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 abstract class CreatureFactory
 {
-    public abstract Creature GenerateCreature(int id);
+    public abstract Creature GenerateCreature(int id, int level);
 }
 
 class ConcreteCreatureFactory : CreatureFactory
@@ -15,7 +15,7 @@ class ConcreteCreatureFactory : CreatureFactory
     private BaseCreatureData _data;
     private bool _debug = true;
     
-    public override Creature GenerateCreature(int id)
+    public override Creature GenerateCreature(int id, int level)
     {
         // Get creature base data
         // TODO make this more efficient
@@ -34,7 +34,7 @@ class ConcreteCreatureFactory : CreatureFactory
         {
             Id = _data.Id,
             Nickname = _data.Nickname,
-            Level = 10,
+            Level = level,
             Types = _data.Types,
             Attacks = new List<Attack> {new Attacks.Standard()} // TODO use attacks from list
         };

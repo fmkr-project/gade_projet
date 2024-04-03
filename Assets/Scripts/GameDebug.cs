@@ -8,8 +8,5 @@ public class GameDebug : MonoBehaviour
     private void Awake()
     {
         _factory = new ConcreteCreatureFactory();
-        _factory.GenerateCreature(1);
-        _factory.GenerateCreature(1);
-        _factory.GenerateCreature(1);
     }
 }
