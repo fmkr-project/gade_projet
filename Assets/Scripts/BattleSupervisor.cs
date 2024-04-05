@@ -20,11 +20,22 @@ public class BattleSupervisor : MonoBehaviour
     private void Start()
     {
         _uiManager.LoadPlayerMonPrompt(PlayerMon);
+        _uiManager.NewDialogue($"Un {EnemyMon.Nickname} sauvage apparaît !\n");
     }
 
-    // Update is called once per frame
+    // Supervisor manages keypresses
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Return) & _uiManager.DialogueIsPrinting())
+        {
+            _uiManager.DialogueExpeditePrinting();
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Return) & !_uiManager.DialogueIsPrinting())
+        {
+            _uiManager.DialogueClose();
+            return;
+        }
     }
 }

@@ -7,7 +7,6 @@ namespace UI
     {
         private TextMeshProUGUI _textBox;
         
-        // Start is called before the first frame update
         void Start()
         {
             _textBox = transform.Find("PromptText").GetComponent<TextMeshProUGUI>();
