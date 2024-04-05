@@ -11,26 +11,25 @@ public class BattleSceneLoader : MonoBehaviour
     [SerializeField] private AnimationCurve spawnCurve;
 
     private GameObject _enemyObject;
-
-    private int _spawnedId = 6; // TODO change this
-
-    private void Awake()
+    
+    private void Start()
     {
-        var prefab = new CreaturePrefabLoader().GetPrefabFromId(_spawnedId);
-        
-        var spawnTime = 0.6f; // temp, TODO do a cleaner version of this
-        _enemyObject = (GameObject) Instantiate(prefab, enemyBase.position,
-            Quaternion.Euler(0, 180, 0));
-        
         // Transfer the info to the supervisor
         var supervisor = transform.Find("/BattleSupervisor").GetComponent<BattleSupervisor>();
         
         // TODO Use player's team instead of a random fella
         supervisor.PlayerMon = new ConcreteCreatureFactory().GenerateCreature(1, 10);
-        // TODO also change this
-        supervisor.EnemyMon = new ConcreteCreatureFactory().GenerateCreature(_spawnedId, 10); // TODO levels
+
+        var bcd = FindObjectOfType<BattleCreatureData>();
+        supervisor.EnemyMon = bcd.GetData();
+        print($"bsl: {supervisor.EnemyMon.Id}");
         
         // Graphics
+        var prefab = new CreaturePrefabLoader().GetPrefabFromId(supervisor.EnemyMon.Id);
+        var spawnTime = 0.6f; // temp, TODO do a cleaner version of this
+        _enemyObject = (GameObject) Instantiate(prefab, enemyBase.position,
+            Quaternion.Euler(0, 180, 0));
+
         // Initial enemy scale is 0
         _enemyObject.transform.localScale = Vector3.zero;
         
@@ -67,7 +66,7 @@ public class BattleSceneLoader : MonoBehaviour
 
     private void OnDestroy()
     {
-       
+        // Reload the overworld scene
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

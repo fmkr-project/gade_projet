@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 public class CreatureSpawnTable
 {
-    public Dictionary<float, Creature> Data;
+    public virtual Dictionary<float, int> Data => new();
 
-    public Creature GetRandomCreature()
+    public int GetRandomCreature()
         // Selects a random creature to spawn
     {
         var rand = (float) new Random().NextDouble();
-        var spawned = new Creature();
+        var spawned = 0;
         var sum = 0f;
 
         foreach (var couple in Data)

@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class Zone
+public class Zone : MonoBehaviour
 {
-    public string Name;
-    public Dictionary<int, CreatureSpawnTable> ZoneSpawnTables;
+    public virtual string ZoneName => "";
+    public virtual Dictionary<string, CreatureSpawnTable> ZoneSpawnTables => new ();
 
-    public Creature GetSpawnedCreatureById(int id)
-    // Get spawned creature from trigger with id
+    public int GetSpawnedCreatureById(string id)
+    // Get spawned creature id from trigger with specified id
     {
         if (!ZoneSpawnTables.ContainsKey(id)) throw new NullReferenceException($"No trigger with id: {id}");
 

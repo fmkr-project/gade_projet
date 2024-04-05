@@ -8,11 +8,14 @@ public class SceneTransition : MonoBehaviour
     public string nextSceneName = "NouvelleScene"; 
     public Light directionalLight;
     public bool isMovable = true;
+
+    public bool isTransitioning;
     
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Trigger"))
         {
+            isTransitioning = true;
             Debug.Log("yo");
         
             if (directionalLight == null)
