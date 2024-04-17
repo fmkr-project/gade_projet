@@ -7,7 +7,7 @@ namespace Creatures
     {
         public C007()
         {
-            Id = 1;
+            Id = 7;
             Nickname = "TROICYLINDRES";
 
             Hp = 35;

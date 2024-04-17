@@ -29,7 +29,6 @@ public class WorldManager : MonoBehaviour
             // TODO level ranges
             var newCreature = new ConcreteCreatureFactory().GenerateCreature(newCreatureId, 10);
             _spawnedData.SetData(newCreature);
-            print($"wm: {newCreatureId}");
         }
     }
 }

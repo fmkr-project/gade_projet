@@ -11,8 +11,6 @@ public class Trigger : MonoBehaviour
         
         Collider[] hits = new Collider[1];
         var size = Physics.OverlapSphereNonAlloc(transform.position, 0.05f, hits, spawnLayerMask);
-        print(size);
-        print(hits[0]);
         if (size == 0) // trigger is not near a spawnable zone
         {
             Destroy(gameObject);

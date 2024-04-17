@@ -7,7 +7,7 @@ namespace Creatures
     {
         public C006()
         {
-            Id = 1;
+            Id = 6;
             Nickname = "DEUXCYLINDRES";
 
             Hp = 20;

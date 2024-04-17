@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Trigger
   - SpawnZone
+  - CreatureData
   layers:
   - Default
   - TransparentFX

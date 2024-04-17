@@ -22,7 +22,6 @@ public class BattleSceneLoader : MonoBehaviour
 
         var bcd = FindObjectOfType<BattleCreatureData>();
         supervisor.EnemyMon = bcd.GetData();
-        print($"bsl: {supervisor.EnemyMon.Id}");
         
         // Graphics
         var prefab = new CreaturePrefabLoader().GetPrefabFromId(supervisor.EnemyMon.Id);

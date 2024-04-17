@@ -2265,7 +2265,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1915149306}
   - component: {fileID: 1915149307}
-  - component: {fileID: 1915149308}
   m_Layer: 0
   m_Name: BattleSupervisor
   m_TagString: Untagged
@@ -2320,18 +2319,6 @@ MonoBehaviour:
     Defense: 0
     Speed: 0
     Types: 
---- !u!114 &1915149308
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1915149305}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec0b0961fa984c5493c1ed73f6a39ff4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2044855126
 GameObject:
   m_ObjectHideFlags: 0
