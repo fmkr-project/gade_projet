@@ -32,7 +32,7 @@ public class CreateTrigger : MonoBehaviour
                     currentPosition.z + randomz);
             }
             GameObject clone = Instantiate(prefab, spawnPosition, spawnpoint.rotation);
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(0.2f);
             Destroy(clone, 1.0f);
             
         }
