@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace UI
 {
@@ -30,6 +31,8 @@ namespace UI
             StartCoroutine(_fader.FadeIn(FadeTime));
             
             _actionBoxArrow = transform.Find("Canvas/ActionBoxArrow").GetComponent<BattleActionBoxArrow>();
+            
+            Debug.Log(GameInformation.playerPosition);
         }
 
         // Update is called once per frame
@@ -97,6 +100,8 @@ namespace UI
         public void ActionFlee()
         {
             StartCoroutine(_fader.FadeOut(FadeTime));
+            
+            SceneManager.LoadScene("Overworld");
         }
     }
 }

@@ -8,6 +8,8 @@ public class SceneTransition : MonoBehaviour
     public string nextSceneName = "NouvelleScene"; 
     public Light directionalLight;
     public bool isMovable = true;
+    public Camera camera;
+    
 
     public bool isTransitioning;
     
@@ -24,13 +26,18 @@ public class SceneTransition : MonoBehaviour
             }
 
             isMovable = false;
+            GameInformation.SetPosition(transform.position);
+            GameInformation.SetCameraPosition(camera.transform.position);
+            Debug.Log(GameInformation.playerPosition);
             StartCoroutine(FadeLightAndLoadScene());
+            
         }
         
     }
 
     private IEnumerator FadeLightAndLoadScene()
     {
+        
         float initialIntensity = directionalLight.intensity;
         float timer = 0f;
 
@@ -43,7 +50,6 @@ public class SceneTransition : MonoBehaviour
             timer += Time.deltaTime;
             yield return null;
         }
-
         
         SceneManager.LoadScene(nextSceneName);
     }

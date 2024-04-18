@@ -6,7 +6,7 @@ public class WorldManager : MonoBehaviour
 {
     private SceneTransition _transitionManager;
     private Zone _currentZone;
-    private static BattleCreatureData _spawnedData;
+        
 
     private bool _isSpawning;
     
@@ -14,7 +14,7 @@ public class WorldManager : MonoBehaviour
     {
         _transitionManager = transform.Find("/Player").GetComponent<SceneTransition>();
         _currentZone = GetComponentInChildren<Zone>();
-        _spawnedData = FindObjectOfType<BattleCreatureData>();
+        
     }
 
     // Update is called once per frame
@@ -28,7 +28,7 @@ public class WorldManager : MonoBehaviour
             // TODO use other spawn types : Cavern, TallGrass...
             // TODO level ranges
             var newCreature = new ConcreteCreatureFactory().GenerateCreature(newCreatureId, 10);
-            _spawnedData.SetData(newCreature);
+            GameInformation.SetData(newCreature);
         }
     }
 }
