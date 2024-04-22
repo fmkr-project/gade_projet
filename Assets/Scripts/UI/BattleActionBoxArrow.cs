@@ -13,7 +13,7 @@ namespace UI
         // Start is called before the first frame update
         void Start()
         {
-            _initialArrowPosition = transform.position;
+            _initialArrowPosition = transform.localPosition;
         }
 
         public void Move(int x, int y)
@@ -27,7 +27,8 @@ namespace UI
         // Update is called once per frame
         void Update()
         {
-            transform.position = _initialArrowPosition + _arrowPosition * _arrowDisplacement;
+            var screenWidth = Screen.width;
+            transform.localPosition = _initialArrowPosition + _arrowPosition * _arrowDisplacement;
         }
 
         public string ReturnChoice()

@@ -13,10 +13,7 @@ namespace UI
             base.Awake();
             choices = new List<string> {"SAC", "SAUVER", "FEUR", "QUITTER"};
             
-            // Get separation between text items
             var items = transform.Find("LateralMenuItems");
-            var layout = items.GetComponent<VerticalLayoutGroup>();
-            Step = (int) layout.spacing;
             
             // Create TextMeshPro items
             var textObject = items.Find("Text");
