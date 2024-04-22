@@ -1,6 +1,6 @@
 namespace Attacks
 {
-    public class Flash
+    public class Flash : Attack
     // the better one
     {
         public new string Name => "FLASH";

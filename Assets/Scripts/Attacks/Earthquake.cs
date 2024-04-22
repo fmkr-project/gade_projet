@@ -1,6 +1,6 @@
 namespace Attacks
 {
-    public class Earthquake
+    public class Earthquake : Attack
     {
         public new string Name => "SEISME";
         public new Type Type => Type.Ground;

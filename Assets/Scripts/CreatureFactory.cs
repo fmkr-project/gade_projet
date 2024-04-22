@@ -36,7 +36,7 @@ class ConcreteCreatureFactory : CreatureFactory
             Nickname = _data.Nickname,
             Level = level,
             Types = _data.Types,
-            Attacks = new List<Attack> {new Attacks.Standard()} // TODO use attacks from list
+            Attacks = new List<Attack> {new Attacks.Struggle()} // TODO use attacks from list
         };
 
         // IV calculation. cf Bulbapedia

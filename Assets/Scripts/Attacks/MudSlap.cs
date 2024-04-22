@@ -1,6 +1,6 @@
 namespace Attacks
 {
-    public class MudSlap
+    public class MudSlap : Attack
     {
         public new string Name => "COUD'BOUE";
         public new Type Type => Type.Ground;
