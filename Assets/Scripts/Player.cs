@@ -22,4 +22,6 @@ public class Player : MonoBehaviour
         Bag.StoreItem(new Objects.BetterOrb());
         Bag.StoreItem(new Objects.BetterOrb());
     }
+
+   
 }

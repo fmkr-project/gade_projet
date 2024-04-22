@@ -20,8 +20,8 @@ public class BattleSceneLoader : MonoBehaviour
         // TODO Use player's team instead of a random fella
         supervisor.PlayerMon = new ConcreteCreatureFactory().GenerateCreature(1, 10);
 
-        var bcd = FindObjectOfType<BattleCreatureData>();
-        supervisor.EnemyMon = bcd.GetData();
+        
+        supervisor.EnemyMon = GameInformation.GetData();
         
         // Graphics
         var prefab = new CreaturePrefabLoader().GetPrefabFromId(supervisor.EnemyMon.Id);
@@ -32,7 +32,7 @@ public class BattleSceneLoader : MonoBehaviour
         // Initial enemy scale is 0
         _enemyObject.transform.localScale = Vector3.zero;
         
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        
         
         // Play a short animation
         StartCoroutine(Spawn());
@@ -53,19 +53,7 @@ public class BattleSceneLoader : MonoBehaviour
         }
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        
-        if (scene.name == "BattleScene")
-        {
-            
-           
-        }
-    }
+   
 
-    private void OnDestroy()
-    {
-        // Reload the overworld scene
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
+    
 }
