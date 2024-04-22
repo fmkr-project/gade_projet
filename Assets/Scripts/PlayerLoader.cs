@@ -5,21 +5,23 @@ using UnityEngine;
 public class PlayerLoader : MonoBehaviour
 {
     [SerializeField] private GameObject playerPrefab;
-    private Vector3 newPosition;
-    private Vector3 newCameraPosition;
-    public Camera camera;
+    private Vector3 _newPosition;
+    private Vector3 _newCameraPosition;
+    private Camera _camera;
     
     void Awake()
     {
-        Debug.Log(GameInformation.playerPosition);
+        _camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        
+        Debug.Log(GameInformation.PlayerPosition);
         
             
-            newPosition = GameInformation.GetPosition();
-            newCameraPosition = GameInformation.GetCameraPosition();
-            camera.transform.position = newCameraPosition;
-            transform.position = newPosition;
-            Instantiate(playerPrefab, transform.position, transform.rotation, transform);
-        
+        _newPosition = GameInformation.GetPosition();
+        _newCameraPosition = GameInformation.GetCameraPosition();
+        _camera.transform.position = _newCameraPosition;
+        transform.position = _newPosition;
+        Instantiate(playerPrefab, transform.position, transform.rotation, transform);
+    
         
     }
 }

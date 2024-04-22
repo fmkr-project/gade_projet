@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UI;
 using UnityEngine;
 
 public class WorldManager : MonoBehaviour
@@ -12,9 +14,13 @@ public class WorldManager : MonoBehaviour
     
     void Awake()
     {
+        // Fade on overworld transition
+        var fader = Resources.FindObjectsOfTypeAll<Fader>()[0];
+        fader.gameObject.SetActive(true);
+        StartCoroutine(fader.FadeIn(1, 0.5f));
+        
         _transitionManager = transform.Find("/Player").GetComponent<SceneTransition>();
         _currentZone = GetComponentInChildren<Zone>();
-        
     }
 
     // Update is called once per frame

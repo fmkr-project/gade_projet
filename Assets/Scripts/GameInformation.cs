@@ -4,8 +4,8 @@ using UnityEngine;
 public class GameInformation : MonoBehaviour
 {
     public static Creature Data;
-    public static Vector3 playerPosition = new Vector3(50.0f, 0.0f, 50.0f);
-    public static Vector3 cameraPosition;
+    public static Vector3 PlayerPosition = new Vector3(50.0f, 0.0f, 50.0f);
+    public static Vector3 CameraPosition;
     public static Bag bag = new();
 
     public static Creature GetData()
@@ -22,21 +22,21 @@ public class GameInformation : MonoBehaviour
 
     public static Vector3 GetPosition()
     {
-        return playerPosition;
+        return PlayerPosition;
     }
 
     public static void SetPosition(Vector3 position)
     {
-        playerPosition = position;
+        PlayerPosition = position;
     }
     
     public static Vector3 GetCameraPosition()
     {
-        return cameraPosition;
+        return CameraPosition;
     }
 
     public static void SetCameraPosition(Vector3 position)
     {
-        cameraPosition = position;
+        CameraPosition = position;
     }
 }

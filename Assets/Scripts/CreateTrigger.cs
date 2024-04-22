@@ -26,7 +26,9 @@ public class CreateTrigger : MonoBehaviour
             Vector3 currentPosition = otherTransform.position;
             int randomx = Random.Range(-5, 5);
             int randomz = Random.Range(-5, 5);
-            if (randomx != 0 && randomz != 0)
+            
+            // Don't spawn too close to the player
+            if (Vector2.SqrMagnitude(new Vector2(randomx, randomz)) >= 1.5)
             {
                 spawnPosition = new Vector3(currentPosition.x + randomx, currentPosition.y,
                     currentPosition.z + randomz);

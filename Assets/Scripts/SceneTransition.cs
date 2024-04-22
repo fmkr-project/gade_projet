@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,11 +9,15 @@ public class SceneTransition : MonoBehaviour
     public string nextSceneName = "NouvelleScene"; 
     public Light directionalLight;
     public bool isMovable = true;
-    public Camera camera;
+    private Camera _camera;
     
-
     public bool isTransitioning;
-    
+
+    private void Awake()
+    {
+        _camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Trigger"))
@@ -27,8 +32,8 @@ public class SceneTransition : MonoBehaviour
 
             isMovable = false;
             GameInformation.SetPosition(transform.position);
-            GameInformation.SetCameraPosition(camera.transform.position);
-            Debug.Log(GameInformation.playerPosition);
+            GameInformation.SetCameraPosition(_camera.transform.position);
+            Debug.Log(GameInformation.PlayerPosition);
             StartCoroutine(FadeLightAndLoadScene());
             
         }

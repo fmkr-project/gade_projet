@@ -12,12 +12,12 @@ namespace UI
         {
             _bg = transform.GetComponent<Image>();
             
-            // Fader is invisible before use
+            /*// Fader is invisible before use
             var empty = Color.black;
             empty.a = 0;
-            _bg.color = empty;
+            _bg.color = empty;*/
         }
-
+        
         public IEnumerator FadeOut(float time)
         {
             if (time <= 0) yield return null;
@@ -32,6 +32,12 @@ namespace UI
                 _bg.color = targetColor;
                 yield return new WaitForSeconds(deltaTime);
             }
+        }
+
+        public IEnumerator FadeOut(float time, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            StartCoroutine(FadeOut(time));
         }
         
         public IEnumerator FadeIn(float time)
@@ -50,10 +56,10 @@ namespace UI
             }
         }
 
-        // Update is called once per frame
-        void Update()
+        public IEnumerator FadeIn(float time, float delay)
         {
-        
+            yield return new WaitForSeconds(delay);
+            StartCoroutine(FadeIn(time));
         }
     }
 }

@@ -32,7 +32,7 @@ namespace UI
             
             _actionBoxArrow = transform.Find("Canvas/ActionBoxArrow").GetComponent<BattleActionBoxArrow>();
             
-            Debug.Log(GameInformation.playerPosition);
+            Debug.Log(GameInformation.PlayerPosition);
         }
 
         // Update is called once per frame
