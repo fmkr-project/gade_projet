@@ -16,8 +16,6 @@ public class Creature
     public int Speed;
     public List<Type> Types;
     public List<Attack> Attacks;
-    
-    // todo IV / EV ?
 
     private void ModifyHp(int hp)
     {

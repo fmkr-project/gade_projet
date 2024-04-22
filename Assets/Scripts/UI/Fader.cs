@@ -61,5 +61,39 @@ namespace UI
             yield return new WaitForSeconds(delay);
             StartCoroutine(FadeIn(time));
         }
+
+        public IEnumerator Flash(float flashIn, float flashOut, float alpha)
+        {
+            if (flashIn <= 0 || flashOut <= 0) yield return null;
+
+            var elapsed = 0f;
+            var targetColor = new Color(255, 255, 255, 0);
+            while (elapsed < flashIn)
+            {
+                var deltaTime = Time.deltaTime;
+                elapsed += deltaTime;
+                targetColor.a = elapsed / flashIn * (alpha / 255);
+                _bg.color = targetColor;
+                yield return new WaitForSeconds(deltaTime);
+            }
+
+            elapsed = 0;
+            while (elapsed < flashOut)
+            {
+                var deltaTime = Time.deltaTime;
+                elapsed += deltaTime;
+                targetColor.a = 1 - elapsed / flashOut * ((255 - alpha) / 255);
+                print(targetColor.a);
+                _bg.color = targetColor;
+                yield return new WaitForSeconds(deltaTime);
+            }
+
+            _bg.color = Color.clear;
+        }
+
+        public IEnumerator Flash(float flashIn, float flashOut)
+        {
+            yield return StartCoroutine(Flash(flashIn, flashOut, 55));
+        }
     }
 }

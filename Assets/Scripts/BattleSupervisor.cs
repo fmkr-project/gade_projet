@@ -10,9 +10,12 @@ public class BattleSupervisor : MonoBehaviour
 
     private bool _willFlee;
     
+    // Battle internals
     // Creatures are stored in memory
     public Creature PlayerMon; // TODO must update the player's team
     public Creature EnemyMon;
+    
+    
     
     void Awake()
     {

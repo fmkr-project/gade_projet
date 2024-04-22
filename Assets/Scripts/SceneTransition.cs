@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -24,6 +25,10 @@ public class SceneTransition : MonoBehaviour
         {
             isTransitioning = true;
             Debug.Log("yo");
+
+            // Flash effect
+            var fader = Resources.FindObjectsOfTypeAll<Fader>()[0];
+            StartCoroutine(fader.Flash(0.1f, 0.1f));
         
             if (directionalLight == null)
             {
