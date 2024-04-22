@@ -15,7 +15,7 @@ namespace Creatures
             Defense = 35;
             Speed = 110;
 
-            Types = new List<Type> {Type.Fire};
+            Types = new List<Type> {Type.Ground};
         }
     }
 }
