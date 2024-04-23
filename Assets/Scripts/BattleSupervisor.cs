@@ -204,35 +204,63 @@ public class BattleSupervisor : MonoBehaviour
 
         if (FirstAttackerIsPlayer())
         {
-            StartCoroutine(PlayerAttacks());
-            _waitObjectAnimate = true;
+            PlayerAttackAnimation();
             // Wait until the animations have finished
             while (_waitObjectAnimate) yield return new WaitForSeconds(Time.deltaTime);
-            
-            StartCoroutine(AttackResult());
-            _waitAttackResults = true;
+
+            PlayerAttackResults();
             // Wait until the attack dialogue is closed
             while (_waitAttackResults) yield return new WaitForSeconds(Time.deltaTime);
             
-            StartCoroutine(EnemyAttacks());
+            EnemyAttackAnimation();
+            while (_waitObjectAnimate) yield return new WaitForSeconds(Time.deltaTime);
+
+            EnemyAttackResults();
+            while (_waitAttackResults) yield return new WaitForSeconds(Time.deltaTime);
         }
         else
         {
-            StartCoroutine(EnemyAttacks());
-            _waitObjectAnimate = true;
+            EnemyAttackAnimation();
             // Wait until the animations have finished
             while (_waitObjectAnimate) yield return new WaitForSeconds(Time.deltaTime);
             
-            StartCoroutine(AttackResult());
-            _waitAttackResults = true;
+            EnemyAttackResults();
             // Wait until the attack dialogue is closed
             while (_waitAttackResults) yield return new WaitForSeconds(Time.deltaTime);
-            
-            StartCoroutine(PlayerAttacks());
+
+            PlayerAttackAnimation();
+            while (_waitObjectAnimate) yield return new WaitForSeconds(Time.deltaTime);
+
+            PlayerAttackResults();
+            while (_waitAttackResults) yield return new WaitForSeconds(Time.deltaTime);
         }
         
         EndBattleTurn();
         yield return null;
+    }
+
+    private void PlayerAttackAnimation()
+    {
+        _waitObjectAnimate = true;
+        StartCoroutine(PlayerAttacks());
+    }
+
+    private void EnemyAttackAnimation()
+    {
+        _waitObjectAnimate = true;
+        StartCoroutine(EnemyAttacks());
+    }
+
+    private void PlayerAttackResults()
+    {
+        _waitAttackResults = true;
+        StartCoroutine(AttackResult(PlayerMon, EnemyMon, _chosenAttack));
+    }
+    
+    private void EnemyAttackResults()
+    {
+        _waitAttackResults = true;
+        StartCoroutine(AttackResult(EnemyMon, PlayerMon, _enemyChosenAttack));
     }
 
     private IEnumerator PlayerAttacks()
@@ -265,7 +293,6 @@ public class BattleSupervisor : MonoBehaviour
         }
 
         PlayerObject.transform.position = initialPos;
-        
         _waitObjectAnimate = false;
     }
     
@@ -308,11 +335,43 @@ public class BattleSupervisor : MonoBehaviour
         _waitObjectAnimate = false;
     }
 
-    private IEnumerator AttackResult()
+    private IEnumerator AttackResult(Creature source, Creature target, Attack attack)
     // Compute attack effects & display
     {
-        _uiManager.NewDialogue($"Object event.");
+        var attackHits = source.TestAttackHits(attack, target);
+        if (attackHits)
+        {
+            var efficiency = target.ReceiveAttack(attack, source);
+            if (Math.Abs(efficiency - 1f) < 0.0001f)
+            {
+                _waitAttackResults = false;
+                yield return null;
+            }
 
+            switch (efficiency)
+            {
+                case > 1f:
+                    _uiManager.NewDialogue("C'est super efficace !");
+                    break;
+                case < 1f:
+                    _uiManager.NewDialogue("Ce n'est pas très efficace...");
+                    break;
+            }
+        }
+        else
+        {
+            if (source == PlayerMon)
+            {
+                var determinant = new List<char> {'a', 'e', 'i', 'o', 'u'}.Contains(EnemyMon.Nickname[0])
+                    ? "L'"
+                    : "Le ";
+                _uiManager.NewDialogue($"{determinant}{EnemyMon.Nickname} ennemi\nesquive l'attaque !");
+            }
+            else
+            {
+                _uiManager.NewDialogue($"{PlayerMon.Nickname}\nesquive l'attaque !");
+            }
+        }
         while (_uiManager.HasDialogueOnScreen())
             yield return new WaitForSeconds(Time.deltaTime);
 

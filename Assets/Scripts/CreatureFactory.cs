@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Attacks;
 using Creatures;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -36,9 +38,46 @@ class ConcreteCreatureFactory : CreatureFactory
             Nickname = _data.Nickname,
             Level = level,
             Types = _data.Types,
-            Attacks = new List<Attack> {new Attacks.Struggle()} // TODO use attacks from list
+            Attacks = new List<Attack>()
         };
+        
+        // Select attacks
+        var usableAttacks = new List<Attack>();
+        _data.LearnableAttacks.ToList().ForEach
+        (
+            couple =>
+            {
+                if (couple.Key <= final.Level) usableAttacks.Add(couple.Value);
+            }
+        );
+        switch (usableAttacks.Count)
+        {
+            // safeguard in case there is no suitable attack
+            case 0:
+                usableAttacks.Add(new Struggle());
+                final.Attacks = usableAttacks;
+                Debug.Log($"WARNING: Creature id {final.Id} has no learnable moves.");
+                break;
+            case < 4:
+            {
+                final.Attacks = usableAttacks;
+                break;
+            }
+            // Pick attacks at random
+            default:
+            {
+                for (var i = 0; i < 4; i++)
+                {
+                    var chosen = usableAttacks[Random.Range(0, usableAttacks.Count)];
+                    final.Attacks.Add(chosen);
+                    usableAttacks.Remove(chosen);
+                }
 
+                break;
+            }
+        }
+        
+        
         // IV calculation. cf Bulbapedia
         var hpIV = Random.Range(0, 32);
         final.MaxHp = GetHpWithIv(_data.Hp, final.Level, hpIV);
@@ -53,8 +92,11 @@ class ConcreteCreatureFactory : CreatureFactory
         if (_debug)
         {
             UnityEngine.Debug.Log($"Created creature: [{final.Id}] {final.Nickname}, lv{final.Level}, " +
-                                  $"of distribution: {final.MaxHp} {final.Attack} {final.Defense} {final.Speed}");
+                                  $"of distribution: {final.MaxHp} {final.Attack} {final.Defense} {final.Speed} " +
+                                  $"and with {final.Attacks.Count} attacks");
         }
+
+        Debug.Log(final.Attacks[0]);
 
         return final;
         

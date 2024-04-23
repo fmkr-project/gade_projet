@@ -1,12 +1,15 @@
 namespace Attacks
 {
-    public class Harden : Attack
+    public record Harden : Attack
     {
-        public new string Name => "ARMURE";
-        public new Type Type => Type.Normal;
-        public new int Accuracy => 100;
+        public Harden()
+        {
+            Name = "ARMURE";
+            Type = Type.Normal;
+            Accuracy = 100;
 
-        public new StatusAttackTarget Target => StatusAttackTarget.User;
-        public new int DefenseBuff = +1;
+            Target = StatusAttackTarget.User;
+            DefenseBuff = +1;
+        }
     }
 }

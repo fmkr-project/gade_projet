@@ -20,7 +20,7 @@ namespace UI
             var printedPower = (attack is null) || (attack.Target == StatusAttackTarget.User) ? "-" :
                 attack.Power == Attack.OHKO ? "∞" : attack.Power.ToString();
             _tmObject.text = attack is null
-                ? "Type -\n-/-"
+                ? "Type -\n- / -"
                 : $"Type {TypeToString.Convert(attack.Type)}\n{printedPower} / {printedAccuracy}";
         }
     }

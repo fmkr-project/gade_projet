@@ -1,10 +1,13 @@
 namespace Attacks
 {
-    public class Earthquake : Attack
+    public record Earthquake : Attack
     {
-        public new string Name => "SEISME";
-        public new Type Type => Type.Ground;
-        public new int Power => 100;
-        public new int Accuracy => 100;
+        public Earthquake()
+        {
+            Name = "SEISME";
+            Type = Type.Ground;
+            Power = 100;
+            Accuracy = 100;
+        }
     }
 }

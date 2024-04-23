@@ -1,10 +1,13 @@
 namespace Attacks
 {
-    public class Swift : Attack
+    public record Swift : Attack
     {
-        public new string Name => "METEORES";
-        public new Type Type => Type.Normal;
-        public new int Power => 60;
-        public new int Accuracy => CannotMiss;
+        public Swift()
+        {
+            Name = "METEORES";
+            Type = Type.Normal;
+            Power = 60;
+            Accuracy = CannotMiss;
+        }
     }
 }

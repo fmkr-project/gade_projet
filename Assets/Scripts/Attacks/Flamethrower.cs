@@ -1,10 +1,13 @@
 namespace Attacks
 {
-    public class Flamethrower : Attack
+    public record Flamethrower : Attack
     {
-        public new string Name => "LANCE-FLAMMES";
-        public new Type Type => Type.Fire;
-        public new int Power => 90;
-        public new int Accuracy => 100;
+        public Flamethrower()
+        {
+            Name = "LANCE-FLAMMES";
+            Type = Type.Fire;
+            Power = 90;
+            Accuracy = 100;
+        }
     }
 }

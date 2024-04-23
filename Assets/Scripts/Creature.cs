@@ -1,21 +1,28 @@
 using System;
 using System.Collections.Generic;
+using Random = UnityEngine.Random;
 
 [Serializable]
 public class Creature
 {
-    public int Id;
-    public string Nickname;
+    [NonSerialized] public int Id;
+    [NonSerialized] public string Nickname;
     
     // Stats
-    public int Level; // pour l'instant pas de système d'xp
-    public int MaxHp;
-    public int CurrentHp;
-    public int Attack;
-    public int Defense;
-    public int Speed;
-    public List<Type> Types;
-    public List<Attack> Attacks;
+    [NonSerialized] public int Level; // pour l'instant pas de système d'xp
+    [NonSerialized] public int MaxHp;
+    [NonSerialized] public int CurrentHp;
+    [NonSerialized] public int Attack;
+    [NonSerialized] public int Defense;
+    [NonSerialized] public int Speed;
+    [NonSerialized] public List<Type> Types;
+    [NonSerialized] public List<Attack> Attacks;
+
+    [NonSerialized] public int AttackBuff;
+    [NonSerialized] public int DefenseBuff;
+    [NonSerialized] public int SpeedBuff;
+    [NonSerialized] public int AccuracyBuff;
+    [NonSerialized] public int CriticalBuff;
 
     private void ModifyHp(int hp)
     {
@@ -28,37 +35,42 @@ public class Creature
     }
     
     // Attacks related
-    public void ReceiveAttack(Attack attack, Creature attacker)
+    public float ReceiveAttack(Attack attack, Creature attacker)
     // Calculate damage done by an attack
-    // Cf Bulbapedia article
+    // Cf Bulbapedia article. Using Gen III formula
     {
         var typeEfficiency = new TypeEfficiency();
         
-        var baseDamage = (2 * attacker.Level / 5) + 2 * attack.Power * attacker.Attack / Defense / 50 + 2;
+        var baseDamage = 2 + (2 + 2 * attacker.Level / 5) * attack.Power * (attacker.Attack / Defense) / 50;
         var effectiveness = typeEfficiency.GetTypeEffectiveness(attack.Type, Types);
         var stab = typeEfficiency.GetSTABMultiplier(attack.Type, attacker.Types);
 
-        var lostHp = (int) (baseDamage * effectiveness * stab);
+        var randomFactor = Random.Range(85, 100) / 100f;
+        
+        // TODO crits
+
+        var lostHp = (int) (baseDamage * effectiveness * stab * randomFactor);
 
         ModifyHp(-lostHp);
+        
+        UnityEngine.Debug.Log($"{Nickname} now has {CurrentHp} / {MaxHp} HP");
+        
         if (this.IsDead())
         {
             // todo
         }
+
+        return effectiveness;
     }
 
-    public void SendAttack(Attack attack, Creature enemy)
+    public bool TestAttackHits(Attack attack, Creature enemy)
         // Compute if an attack hits an enemy
         // Cf Bulbapedia
     {
-        var finalAccuracy = attack.Accuracy; // TODO modifiers
+        var finalAccuracy = attack.Accuracy; // TODO modifiers + enemy
 
         var value = UnityEngine.Random.Range(1, 100);
-        if (value <= finalAccuracy) // hit
-        {
-            enemy.ReceiveAttack(attack, this);
-        }
-        // TODO else miss
+        return value <= finalAccuracy;
     }
 
     public void Heal(HealingItem potion)

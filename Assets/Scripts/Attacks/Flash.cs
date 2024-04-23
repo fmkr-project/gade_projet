@@ -1,14 +1,17 @@
 namespace Attacks
 {
-    public class Flash : Attack
+    public record Flash : Attack
     // the better one
     {
-        public new string Name => "FLASH";
-        public new Type Type => Type.Normal;
-        public new int Power => 50;
-        public new int Accuracy => 95;
+        public Flash()
+        {
+            Name = "FLASH";
+            Type = Type.Normal;
+            Power = 50;
+            Accuracy = 95;
 
-        public new StatusAttackTarget Target => StatusAttackTarget.Enemy;
-        public new int AccuracyBuff = -1;
+            Target = StatusAttackTarget.Enemy;
+            AccuracyBuff = -1;
+        }
     }
 }
