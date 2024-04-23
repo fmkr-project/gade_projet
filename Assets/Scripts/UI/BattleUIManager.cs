@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 namespace UI
 {
@@ -10,14 +13,22 @@ namespace UI
         private BattleMessageBox _messageBox;
         private BattleActionBox _actionBox;
         private BattleDialogueBox _dialogueBox;
+        private BattleAttackBox _attackBox;
+
+        private BattleAttackDescInfobox _descBox;
+        private BattleAttackSpecInfobox _specBox;
 
         private Fader _fader;
         private const float FadeTime = 0.6f;
         
-        // Arrow "in" the action box
+        // Arrows
         private BattleActionBoxArrow _actionBoxArrow;
+        private BattleAttackBoxArrow _attackBoxArrow;
 
         private Coroutine _coroutine; // Save the coroutine to be able to stop it later
+        
+        // Flags
+        [NonSerialized] public bool AttackMenuIsOpen = false;
         
         void Awake()
         {
@@ -25,12 +36,20 @@ namespace UI
             _actionBox = transform.Find("Canvas/ActionBox").GetComponent<BattleActionBox>();
             _dialogueBox = transform.Find("Canvas/DialogueBox").GetComponent<BattleDialogueBox>();
             _dialogueBox.gameObject.SetActive(true);
+            _attackBox = transform.Find("Canvas/AttackBox").GetComponent<BattleAttackBox>();
+            _attackBox.gameObject.SetActive(false);
+            _specBox = transform.Find("Canvas/AttackInfoBox").GetComponent<BattleAttackSpecInfobox>();
+            _specBox.gameObject.SetActive(false);
+            _descBox = transform.Find("Canvas/AttackInfoBox2").GetComponent<BattleAttackDescInfobox>();
+            _descBox.gameObject.SetActive(false);
 
             _fader = transform.Find("Canvas/Fader").GetComponent<Fader>();
             _fader.gameObject.SetActive(true);
             StartCoroutine(_fader.FadeIn(FadeTime));
             
             _actionBoxArrow = transform.Find("Canvas/ActionBoxArrow").GetComponent<BattleActionBoxArrow>();
+            _attackBoxArrow = transform.Find("Canvas/AttackBoxArrow").GetComponent<BattleAttackBoxArrow>();
+            _attackBoxArrow.gameObject.SetActive(false);
             
             Debug.Log(GameInformation.PlayerPosition);
         }
@@ -76,6 +95,20 @@ namespace UI
         }
         
         // Action box
+        public void ActionOpenMenu()
+        {
+            _messageBox.gameObject.SetActive(true);
+            _actionBox.gameObject.SetActive(true);
+            _actionBoxArrow.gameObject.SetActive(true);
+        }
+
+        public void ActionCloseMenu()
+        {
+            _messageBox.gameObject.SetActive(false);
+            _actionBox.gameObject.SetActive(false);
+            _actionBoxArrow.gameObject.SetActive(false);
+        }
+        
         public void ActionMove(Direction direction)
         {
             switch (direction)
@@ -103,5 +136,68 @@ namespace UI
             
             SceneManager.LoadScene("Overworld");
         }
+        
+        // Attack box
+        public void AttackInitializeDraw(Creature playerMon)
+        {
+            _attackBox.Draw(playerMon);
+        }
+
+        public void AttackMove(Direction direction)
+        {
+            switch (direction)
+            {
+                case Direction.Down: _attackBoxArrow.Move(1);
+                    break;
+                case Direction.Up: _attackBoxArrow.Move(-1);
+                    break;
+                case Direction.Left:
+                case Direction.Right:
+                default:
+                    return;
+            }
+        }
+
+        public void AttackOpenMenu()
+        {
+            AttackMenuIsOpen = true;
+            _attackBox.gameObject.SetActive(true);
+            _specBox.gameObject.SetActive(true);
+            _descBox.gameObject.SetActive(true);
+            _attackBoxArrow.gameObject.SetActive(true);
+        }
+        
+        public void AttackCloseMenu()
+        {
+            AttackMenuIsOpen = false;
+            _attackBox.gameObject.SetActive(false);
+            _specBox.gameObject.SetActive(false);
+            _descBox.gameObject.SetActive(false);
+            _attackBoxArrow.gameObject.SetActive(false);
+        }
+
+        public void AttackInfoRedraw(Creature playerMon)
+            // Refresh attack information panels
+        {
+            var attack = AttackGetMonAttack(playerMon);
+            _specBox.Redraw(attack);
+            _descBox.Redraw(attack);
+        }
+
+        public string AttackGetChoice()
+        {
+            // Transform TMPro objects into strings
+            var all = _attackBox.AttackTexts.Select(tmObject => tmObject.text).ToList();
+            all.Add("RETOUR");
+
+            return all[_attackBoxArrow.ArrowPosition];
+        }
+
+        public Attack AttackGetMonAttack(Creature usedMon)
+        {
+            return AttackGetChoice() != "-" && AttackGetChoice() != "RETOUR" ?
+            usedMon.Attacks[_attackBoxArrow.ArrowPosition] : null;
+        }
+
     }
 }

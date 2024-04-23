@@ -19,12 +19,6 @@ namespace UI
             _textBox = transform.Find("PromptText").GetComponent<TextMeshProUGUI>();
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
-        
         public void InstantChangeBoxText()
         // Use stored string to print immediately what needs to be printed
         {

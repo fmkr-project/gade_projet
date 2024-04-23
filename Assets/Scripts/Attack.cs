@@ -7,14 +7,17 @@ public enum StatusAttackTarget // a normal attack always targets the enemy
 public abstract class Attack
 {
     // Attack that cannot miss (+ status)
-    protected const int CannotMiss = int.MaxValue;
+    public static int CannotMiss = int.MaxValue;
     // One-hit KO
-    protected const int OHKO = int.MaxValue;
+    public static int OHKO = int.MaxValue;
     
     public readonly string Name = "??????????"; // Placeholder in case the name is not implemented
+    public readonly string Desc = "";
     public readonly Type Type = Type.NeutralType;
     public readonly int Power;
     public readonly int Accuracy = CannotMiss;
+
+    public readonly int Priority;
     
     // Status alts
     public readonly StatusAttackTarget Target;

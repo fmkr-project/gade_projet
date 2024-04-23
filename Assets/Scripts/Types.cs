@@ -12,6 +12,24 @@ public enum Type
     // todo types ++
 }
 
+public class TypeToString
+{
+    public static string Convert(Type type)
+    {
+        switch (type)
+        {
+            case Type.NeutralType: return "???";
+            case Type.Normal: return "NORMAL";
+            case Type.Fire: return "FEU";
+            case Type.Water: return "EAU";
+            case Type.Grass: return "HERBE";
+            
+            case Type.Ground: return "SOL";
+            default: return "/";
+        }
+    }
+}
+
 public class TypeChart
 // Documents weaknesses and resistances of types
 // List can be empty

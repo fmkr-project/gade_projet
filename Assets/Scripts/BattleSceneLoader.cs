@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,6 +12,7 @@ public class BattleSceneLoader : MonoBehaviour
     [SerializeField] private AnimationCurve spawnCurve;
 
     private GameObject _enemyObject;
+    private GameObject _playerObject;
     
     private void Start()
     {
@@ -20,25 +22,40 @@ public class BattleSceneLoader : MonoBehaviour
         // TODO Use player's team instead of a random fella
         supervisor.PlayerMon = new ConcreteCreatureFactory().GenerateCreature(1, 10);
 
-        
-        supervisor.EnemyMon = GameInformation.GetData();
+        try
+        {
+            supervisor.EnemyMon = GameInformation.GetData();
+        }
+        catch (NullReferenceException e)
+        {
+            print("WARNING: enemy mon data not found, defaulting to placeholder mon");
+            supervisor.EnemyMon = new ConcreteCreatureFactory().GenerateCreature(1, 10);
+        }
         
         // Graphics
-        var prefab = new CreaturePrefabLoader().GetPrefabFromId(supervisor.EnemyMon.Id);
+        var prefabLoader = new CreaturePrefabLoader();
+        var playerPrefab = prefabLoader.GetPrefabFromId(supervisor.PlayerMon.Id);
+        var enemyPrefab = prefabLoader.GetPrefabFromId(supervisor.EnemyMon.Id);
         var spawnTime = 0.6f; // temp, TODO do a cleaner version of this
-        _enemyObject = (GameObject) Instantiate(prefab, enemyBase.position,
+        _enemyObject = (GameObject) Instantiate(enemyPrefab, enemyBase.position,
             Quaternion.Euler(0, 180, 0));
+        _playerObject = (GameObject) Instantiate(playerPrefab, playerBase.position,
+            Quaternion.Euler(Vector3.zero));
 
-        // Initial enemy scale is 0
+        // Initial scale is 0
         _enemyObject.transform.localScale = Vector3.zero;
-        
-        
+        _playerObject.transform.localScale = Vector3.zero;
         
         // Play a short animation
-        StartCoroutine(Spawn());
+        StartCoroutine(Spawn(_enemyObject));
+        StartCoroutine(Spawn(_playerObject));
+        
+        // Save to the supervisor
+        supervisor.PlayerObject = _playerObject;
+        supervisor.EnemyObject = _enemyObject;
     }
 
-    IEnumerator Spawn()
+    public IEnumerator Spawn(GameObject mon)
     {
         var time = spawnCurve[spawnCurve.keys.Length - 1].time;
         
@@ -48,7 +65,7 @@ public class BattleSceneLoader : MonoBehaviour
             var deltaTime = Time.deltaTime;
             remaining += deltaTime;
             var delta = spawnCurve.Evaluate(remaining);
-            _enemyObject.transform.localScale = new Vector3(delta, delta, delta);
+            mon.transform.localScale = new Vector3(delta, delta, delta);
             yield return new WaitForSeconds(deltaTime);
         }
     }
