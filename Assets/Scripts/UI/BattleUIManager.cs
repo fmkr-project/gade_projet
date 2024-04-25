@@ -18,6 +18,8 @@ namespace UI
         private BattleAttackDescInfobox _descBox;
         private BattleAttackSpecInfobox _specBox;
 
+        private PlayerBattleFrame _playerInfo;
+
         private Fader _fader;
         private const float FadeTime = 0.6f;
         
@@ -43,6 +45,8 @@ namespace UI
             _descBox = transform.Find("Canvas/AttackInfoBox2").GetComponent<BattleAttackDescInfobox>();
             _descBox.gameObject.SetActive(false);
 
+            _playerInfo = GetComponentInChildren<PlayerBattleFrame>();
+
             _fader = transform.Find("Canvas/Fader").GetComponent<Fader>();
             _fader.gameObject.SetActive(true);
             StartCoroutine(_fader.FadeIn(FadeTime));
@@ -52,6 +56,22 @@ namespace UI
             _attackBoxArrow.gameObject.SetActive(false);
             
             Debug.Log(GameInformation.PlayerPosition);
+        }
+
+        public void FetchPlayerMonInfo(Creature creature)
+        {
+            _playerInfo.TrackedCreature = creature;
+        }
+
+        public void InitializeMonsInfo()
+        {
+            _playerInfo.Initialize();
+            ReloadMonsInfo();
+        }
+
+        public void ReloadMonsInfo()
+        {
+            _playerInfo.Redraw();
         }
 
         // Update is called once per frame
