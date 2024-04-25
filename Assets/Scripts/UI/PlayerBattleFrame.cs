@@ -36,7 +36,12 @@ namespace UI
 
         public void Redraw()
         {
-            _playerHpBar.Transition();
+            StartCoroutine(_playerHpBar.Transition());
+        }
+
+        public void InitialRedraw()
+        {
+            _playerHpBar.InstantTransition();
         }
     }
 }

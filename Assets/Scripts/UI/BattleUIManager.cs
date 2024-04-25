@@ -66,10 +66,10 @@ namespace UI
         public void InitializeMonsInfo()
         {
             _playerInfo.Initialize();
-            ReloadMonsInfo();
+            _playerInfo.InitialRedraw();
         }
 
-        public void ReloadMonsInfo()
+        public void ReloadPlayerMonInfo()
         {
             _playerInfo.Redraw();
         }

@@ -257,14 +257,13 @@ public class BattleSupervisor : MonoBehaviour
     {
         _waitAttackResults = true;
         StartCoroutine(AttackResult(PlayerMon, EnemyMon, _chosenAttack));
-        _uiManager.ReloadMonsInfo();
     }
     
     private void EnemyAttackResults()
     {
         _waitAttackResults = true;
         StartCoroutine(AttackResult(EnemyMon, PlayerMon, _enemyChosenAttack));
-        _uiManager.ReloadMonsInfo();
+        _uiManager.ReloadPlayerMonInfo();
     }
 
     private IEnumerator PlayerAttacks()

@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI
 {
@@ -9,14 +11,38 @@ namespace UI
         [NonSerialized] public Creature TrackedCreature;
 
         private RectTransform _fg;
+        private Image _fgImage;
         private TextMeshProUGUI _hpText;
 
         private int _oldDisplayedHp;
+        private const float TransitionTime = 0.25f;
+
+        private static readonly Color32 HealthOkColor = new (0, 168, 0, 255);
+        private static readonly Color32 HealthLowColor = new (255, 214, 0,255);
+        private static readonly Color32 HealthVeryLowColor = new (227, 33, 23,255);
 
         private void Awake()
         {
             _fg = transform.Find("Fg").GetComponent<RectTransform>();
+            _fgImage = transform.Find("Fg").GetComponent<Image>();
             _hpText = transform.Find("Text").GetComponent<TextMeshProUGUI>();
+        }
+
+        private void RepaintBar(int hp)
+        {
+            // Change bar color with HP
+            var rate = (float) hp / TrackedCreature.MaxHp;
+            switch (rate)
+            {
+                case > 0.5f: _fgImage.color = HealthOkColor;
+                    break;
+                case > 0.2f: _fgImage.color = HealthLowColor;
+                    break;
+                default: _fgImage.color = HealthVeryLowColor;
+                    break;
+            }
+
+            print(_fgImage.color);
         }
 
         public void Initialize(Creature creature)
@@ -25,11 +51,37 @@ namespace UI
             _oldDisplayedHp = creature.CurrentHp;
         }
 
-        public void Transition()
+        public void InstantTransition()
         {
-            // TODO animation
-            var displayedHp = Math.Max(TrackedCreature.CurrentHp, 0);
+            // Transition, but for initialising box positions
+            var displayedHp = TrackedCreature.CurrentHp;
             _fg.anchorMax = new Vector2((float) displayedHp / TrackedCreature.MaxHp, 1);
+            _hpText.text = $"{displayedHp} / {TrackedCreature.MaxHp}";
+            RepaintBar(displayedHp);
+        }
+        
+        public IEnumerator Transition()
+        {
+            var displayedHp = Math.Max(TrackedCreature.CurrentHp, 0);
+            var delta = _oldDisplayedHp - displayedHp;
+            
+            var elapsed = 0f;
+            while (elapsed < TransitionTime)
+            {
+                var deltaTime = Time.deltaTime;
+                var ratio = elapsed / TransitionTime;
+
+                var anchorHp = _oldDisplayedHp - delta * ratio;
+                var animHp = (int) Math.Round(anchorHp, 0);
+                _fg.anchorMax = new Vector2(anchorHp / TrackedCreature.MaxHp, 1);
+                _hpText.text = $"{animHp} / {TrackedCreature.MaxHp}";
+
+                RepaintBar(animHp);
+
+                yield return new WaitForSeconds(deltaTime);
+                elapsed += deltaTime;
+            }
+
             _hpText.text = $"{displayedHp} / {TrackedCreature.MaxHp}";
             _oldDisplayedHp = displayedHp;
         }
