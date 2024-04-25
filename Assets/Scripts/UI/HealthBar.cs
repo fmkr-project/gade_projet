@@ -25,7 +25,15 @@ namespace UI
         {
             _fg = transform.Find("Fg").GetComponent<RectTransform>();
             _fgImage = transform.Find("Fg").GetComponent<Image>();
-            _hpText = transform.Find("Text").GetComponent<TextMeshProUGUI>();
+            try
+            {
+                _hpText = transform.Find("Text").GetComponent<TextMeshProUGUI>();
+            }
+            catch (NullReferenceException e)
+            {
+                // Enemy bar has no text indicator
+                _hpText = null;
+            }
         }
 
         private void RepaintBar(int hp)
@@ -56,7 +64,7 @@ namespace UI
             // Transition, but for initialising box positions
             var displayedHp = TrackedCreature.CurrentHp;
             _fg.anchorMax = new Vector2((float) displayedHp / TrackedCreature.MaxHp, 1);
-            _hpText.text = $"{displayedHp} / {TrackedCreature.MaxHp}";
+            if (_hpText is not null) _hpText.text = $"{displayedHp} / {TrackedCreature.MaxHp}";
             RepaintBar(displayedHp);
         }
         
@@ -74,7 +82,7 @@ namespace UI
                 var anchorHp = _oldDisplayedHp - delta * ratio;
                 var animHp = (int) Math.Round(anchorHp, 0);
                 _fg.anchorMax = new Vector2(anchorHp / TrackedCreature.MaxHp, 1);
-                _hpText.text = $"{animHp} / {TrackedCreature.MaxHp}";
+                if (_hpText is not null) _hpText.text = $"{animHp} / {TrackedCreature.MaxHp}";
 
                 RepaintBar(animHp);
 
@@ -82,7 +90,7 @@ namespace UI
                 elapsed += deltaTime;
             }
 
-            _hpText.text = $"{displayedHp} / {TrackedCreature.MaxHp}";
+            if (_hpText is not null) _hpText.text = $"{displayedHp} / {TrackedCreature.MaxHp}";
             _oldDisplayedHp = displayedHp;
         }
         

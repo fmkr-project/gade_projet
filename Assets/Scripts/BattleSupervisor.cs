@@ -38,7 +38,7 @@ public class BattleSupervisor : MonoBehaviour
 
     private void Start()
     {
-        _uiManager.FetchPlayerMonInfo(PlayerMon);
+        _uiManager.FetchMonsInfo(PlayerMon, EnemyMon);
         _uiManager.InitializeMonsInfo();
         _uiManager.LoadPlayerMonPrompt(PlayerMon);
         _uiManager.NewDialogue($"Un {EnemyMon.Nickname} sauvage apparaît !\n ");
@@ -257,6 +257,7 @@ public class BattleSupervisor : MonoBehaviour
     {
         _waitAttackResults = true;
         StartCoroutine(AttackResult(PlayerMon, EnemyMon, _chosenAttack));
+        _uiManager.ReloadEnemyMonInfo();
     }
     
     private void EnemyAttackResults()

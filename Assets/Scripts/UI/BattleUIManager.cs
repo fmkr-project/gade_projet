@@ -19,6 +19,7 @@ namespace UI
         private BattleAttackSpecInfobox _specBox;
 
         private PlayerBattleFrame _playerInfo;
+        private EnemyBattleFrame _enemyInfo;
 
         private Fader _fader;
         private const float FadeTime = 0.6f;
@@ -46,6 +47,7 @@ namespace UI
             _descBox.gameObject.SetActive(false);
 
             _playerInfo = GetComponentInChildren<PlayerBattleFrame>();
+            _enemyInfo = GetComponentInChildren<EnemyBattleFrame>();
 
             _fader = transform.Find("Canvas/Fader").GetComponent<Fader>();
             _fader.gameObject.SetActive(true);
@@ -58,20 +60,29 @@ namespace UI
             Debug.Log(GameInformation.PlayerPosition);
         }
 
-        public void FetchPlayerMonInfo(Creature creature)
+        public void FetchMonsInfo(Creature player, Creature enemy)
         {
-            _playerInfo.TrackedCreature = creature;
+            _playerInfo.TrackedCreature = player;
+            _enemyInfo.TrackedCreature = enemy;
         }
 
         public void InitializeMonsInfo()
         {
             _playerInfo.Initialize();
             _playerInfo.InitialRedraw();
+            
+            _enemyInfo.Initialize();
+            _enemyInfo.InitialRedraw();
         }
 
         public void ReloadPlayerMonInfo()
         {
             _playerInfo.Redraw();
+        }
+
+        public void ReloadEnemyMonInfo()
+        {
+            _enemyInfo.Redraw();
         }
 
         // Update is called once per frame
