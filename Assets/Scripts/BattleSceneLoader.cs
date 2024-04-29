@@ -9,7 +9,7 @@ public class BattleSceneLoader : MonoBehaviour
     public Transform playerBase;
     public Transform enemyBase;
 
-    [SerializeField] private AnimationCurve spawnCurve;
+    [SerializeField] public AnimationCurve spawnCurve;
 
     private GameObject _enemyObject;
     private GameObject _playerObject;

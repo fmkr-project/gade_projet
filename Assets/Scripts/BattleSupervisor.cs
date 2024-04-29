@@ -22,6 +22,7 @@ public class BattleSupervisor : MonoBehaviour
 
     private const float BonkDuration = 0.2f; // Attack animation duration
     private const float BonkDistance = 0.5f;
+    private const float SpawnTime = 0.6f; // TODO unify this with BattleSceneLoader
     
     // Battle logic
     private bool _readyForBattle;
@@ -30,6 +31,7 @@ public class BattleSupervisor : MonoBehaviour
     private Attack _enemyChosenAttack;
     private bool _waitObjectAnimate;
     private bool _waitAttackResults;
+    private bool _checkDie;
     
     void Awake()
     {
@@ -214,11 +216,17 @@ public class BattleSupervisor : MonoBehaviour
             // Wait until the attack dialogue is closed
             while (_waitAttackResults) yield return new WaitForSeconds(Time.deltaTime);
             
+            StartCoroutine(CheckEnemyDie());
+            while (_checkDie) yield return new WaitForSeconds(Time.deltaTime);
+            
             EnemyAttackAnimation();
             while (_waitObjectAnimate) yield return new WaitForSeconds(Time.deltaTime);
 
             EnemyAttackResults();
             while (_waitAttackResults) yield return new WaitForSeconds(Time.deltaTime);
+            
+            StartCoroutine(CheckPlayerDie());
+            while (_checkDie) yield return new WaitForSeconds(Time.deltaTime);
         }
         else
         {
@@ -230,11 +238,17 @@ public class BattleSupervisor : MonoBehaviour
             // Wait until the attack dialogue is closed
             while (_waitAttackResults) yield return new WaitForSeconds(Time.deltaTime);
 
+            StartCoroutine(CheckPlayerDie());
+            while (_checkDie) yield return new WaitForSeconds(Time.deltaTime);
+
             PlayerAttackAnimation();
             while (_waitObjectAnimate) yield return new WaitForSeconds(Time.deltaTime);
 
             PlayerAttackResults();
             while (_waitAttackResults) yield return new WaitForSeconds(Time.deltaTime);
+            
+            StartCoroutine(CheckEnemyDie());
+            while (_checkDie) yield return new WaitForSeconds(Time.deltaTime);
         }
         
         EndBattleTurn();
@@ -298,6 +312,73 @@ public class BattleSupervisor : MonoBehaviour
 
         PlayerObject.transform.position = initialPos;
         _waitObjectAnimate = false;
+    }
+
+    private IEnumerator CheckPlayerDie()
+    {
+        _checkDie = true;
+
+        if (!PlayerMon.IsDead())
+        {
+            _checkDie = false;
+            yield break;
+        }
+        // Begin death animation
+        _uiManager.NewDialogue($"{PlayerMon.Nickname}\nest K.O. !");
+
+        var curve = FindObjectOfType<BattleSceneLoader>().spawnCurve;
+        var elapsed = SpawnTime;
+        while (elapsed > 0)
+        {
+            var deltaTime = Time.deltaTime;
+            var delta = curve.Evaluate(elapsed);
+            PlayerObject.transform.localScale = new Vector3(delta, delta, delta);
+            elapsed -= deltaTime;
+            yield return new WaitForSeconds(deltaTime);
+        }
+        
+        // Don't advance until the dialogue is closed
+        while (_uiManager.HasDialogueOnScreen())
+            yield return new WaitForSeconds(Time.deltaTime);
+
+        _checkDie = false;
+        
+        // TODO restart with another creature
+    }
+    
+    private IEnumerator CheckEnemyDie()
+    {
+        _checkDie = true;
+
+        if (!EnemyMon.IsDead())
+        {
+            _checkDie = false;
+            yield break;
+        }
+        // Begin death animation
+        var determinant = new List<char> {'a', 'e', 'i', 'o', 'u'}.Contains(EnemyMon.Nickname[0])
+            ? "L'"
+            : "Le ";
+        _uiManager.NewDialogue($"{determinant}{EnemyMon.Nickname} ennemi\nest K.O. !");
+
+        var curve = FindObjectOfType<BattleSceneLoader>().spawnCurve;
+        var elapsed = SpawnTime;
+        while (elapsed > 0)
+        {
+            var deltaTime = Time.deltaTime;
+            var delta = curve.Evaluate(elapsed);
+            EnemyObject.transform.localScale = new Vector3(delta, delta, delta);
+            elapsed -= deltaTime;
+            yield return new WaitForSeconds(deltaTime);
+        }
+        
+        // Don't advance until the dialogue is closed
+        while (_uiManager.HasDialogueOnScreen())
+            yield return new WaitForSeconds(Time.deltaTime);
+
+        _checkDie = false;
+        
+        // TODO drops / XP
     }
     
     private IEnumerator EnemyAttacks()
