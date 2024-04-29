@@ -21,6 +21,8 @@ public class WorldManager : MonoBehaviour
         
         _transitionManager = transform.Find("/Player").GetComponent<SceneTransition>();
         _currentZone = GetComponentInChildren<Zone>();
+        
+        //print(GameInformation.squad);
     }
 
     // Update is called once per frame
@@ -35,6 +37,11 @@ public class WorldManager : MonoBehaviour
             // TODO level ranges
             var newCreature = new ConcreteCreatureFactory().GenerateCreature(newCreatureId, 10);
             GameInformation.SetData(newCreature);
+            GameInformation.squad.StoreMonster(newCreature);
+            //foreach (var kvp in GameInformation.squad.Monsters)
+            //{
+            //    Debug.Log("Clé : " + kvp.Key + ", Valeur : " + kvp.Value);
+            //}
         }
     }
 }

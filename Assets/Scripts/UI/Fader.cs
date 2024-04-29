@@ -83,7 +83,7 @@ namespace UI
                 var deltaTime = Time.deltaTime;
                 elapsed += deltaTime;
                 targetColor.a = 1 - elapsed / flashOut * ((255 - alpha) / 255);
-                print(targetColor.a);
+                //print(targetColor.a);
                 _bg.color = targetColor;
                 yield return new WaitForSeconds(deltaTime);
             }

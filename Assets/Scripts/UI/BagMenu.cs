@@ -18,7 +18,7 @@ namespace UI
         private void Start()
         {
             _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-            Bag = _player.Bag;
+            //Bag = _player.Bag;
         }
         
         public void Redraw()
