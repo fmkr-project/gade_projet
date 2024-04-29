@@ -37,11 +37,16 @@ public class WorldManager : MonoBehaviour
             // TODO level ranges
             var newCreature = new ConcreteCreatureFactory().GenerateCreature(newCreatureId, 10);
             GameInformation.SetData(newCreature);
+            //A supprimer
             GameInformation.squad.StoreMonster(newCreature);
+            
             //foreach (var kvp in GameInformation.squad.Monsters)
             //{
             //    Debug.Log("Clé : " + kvp.Key + ", Valeur : " + kvp.Value);
             //}
         }
+        
+        
+        
     }
 }

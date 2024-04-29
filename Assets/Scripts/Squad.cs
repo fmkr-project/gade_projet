@@ -1,32 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Collections.Specialized;
 using UnityEngine;
 
 public class Squad 
 {
-    public Dictionary<Creature, int> Monsters = new Dictionary<Creature, int>();
+    
+    public OrderedDictionary Monsters = new OrderedDictionary();
     
     public void StoreMonster(Creature creature)
     {
-        if (Monsters.ContainsKey(creature))
+        if (Monsters.Contains(creature))
         {
-            Monsters[creature]++;
+            Monsters[creature] = (int)Monsters[creature] + 1;
         }
         else
         {
             Monsters.Add(creature, 1);
         }
+        
     }
-
-   
 
     public void KillMonster(Creature creature)
     {
-        if (Monsters.ContainsKey(creature))
+        if (Monsters.Contains(creature))
         {
-            if (Monsters[creature] > 1)
+            int count = (int)Monsters[creature];
+            if (count > 1)
             {
-                Monsters[creature]--;
+                Monsters[creature] = count - 1;
             }
             else
             {
@@ -38,10 +38,11 @@ public class Squad
             Debug.Log("La créature n'existe pas dans le dictionnaire.");
         }
     }
-
-    
-
-    
-
-   
+    /*public void PrintValues()
+    {
+        foreach (var value in Monsters.Values)
+        {
+            Debug.Log(value);
+        }
+    }*/
 }

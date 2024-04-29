@@ -28,10 +28,8 @@ public class Player : MonoBehaviour
         {
             Debug.Log("Clé : " + kvp.Key + ", Valeur : " + kvp.Value);
         }
-        foreach (var kvp in GameInformation.squad.Monsters)
-        {
-            Debug.Log("Clé : " + kvp.Key + ", Valeur : " + kvp.Value);
-        }
+        ;
+        
 
     }
 
