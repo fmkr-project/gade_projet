@@ -13,18 +13,18 @@ public class Player : MonoBehaviour
     {
         // debug
         C001 creatureC001 = new C001();
-        GameInformation.bag.StoreItem(new Objects.ClassicOrb());
-        GameInformation.bag.StoreItem(new Objects.ClassicOrb());
-        GameInformation.bag.StoreItem(new Objects.ClassicOrb());
-        GameInformation.bag.StoreItem(new Objects.BetterOrb());
-        GameInformation.bag.StoreItem(new Objects.BetterOrb());
+        GameInformation.Bag.StoreItem(new Objects.ClassicOrb());
+        GameInformation.Bag.StoreItem(new Objects.ClassicOrb());
+        GameInformation.Bag.StoreItem(new Objects.ClassicOrb());
+        GameInformation.Bag.StoreItem(new Objects.BetterOrb());
+        GameInformation.Bag.StoreItem(new Objects.BetterOrb());
         
         
        
         
         
-        Debug.Log(GameInformation.bag.Contents);
-        foreach (var kvp in GameInformation.bag.Contents)
+        Debug.Log(GameInformation.Bag.Contents);
+        foreach (var kvp in GameInformation.Bag.Contents)
         {
             Debug.Log("Clé : " + kvp.Key + ", Valeur : " + kvp.Value);
         }

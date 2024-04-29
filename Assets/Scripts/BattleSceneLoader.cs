@@ -19,8 +19,7 @@ public class BattleSceneLoader : MonoBehaviour
         // Transfer the info to the supervisor
         var supervisor = transform.Find("/BattleSupervisor").GetComponent<BattleSupervisor>();
         
-        // TODO Use player's team instead of a random fella
-        supervisor.PlayerMon = new ConcreteCreatureFactory().GenerateCreature(1, 10);
+        supervisor.PlayerMon = GameInformation.GetBattleReadyCreature();
 
         try
         {

@@ -11,7 +11,7 @@ namespace UI
         private new void Awake()
         {
             base.Awake();
-            choices = new List<string> {"SAC", "SAUVER", "FEUR", "QUITTER"};
+            choices = new List<string> {"ÉQUIPE", "SAC", "SAUVER", "FEUR", "QUITTER"};
             
             var items = transform.Find("LateralMenuItems");
             

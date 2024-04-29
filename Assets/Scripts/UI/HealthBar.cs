@@ -49,8 +49,6 @@ namespace UI
                 default: _fgImage.color = HealthVeryLowColor;
                     break;
             }
-
-            print(_fgImage.color);
         }
 
         public void Initialize(Creature creature)

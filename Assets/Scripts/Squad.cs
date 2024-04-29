@@ -1,41 +1,46 @@
+using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using UnityEngine;
 
 public class Squad 
 {
+    public List<Creature> Monsters = new ();
+
+    public Squad()
+    {
+        // TODO nicer introduction screen so that the player can choose a starting mon
+        Monsters.Add(new ConcreteCreatureFactory().GenerateCreature(1, 15));
+    }
     
-    public OrderedDictionary Monsters = new OrderedDictionary();
+    public (int, Creature) GetBattleReadyCreature()
+    // Return the first creature fit for battle along with its index in the array
+    {
+        return (0, Monsters[0]); // TODO fainted mons
+    }
+
+    public void UpdateMonStatus(int index, Creature creature)
+        // Put in the array an updated version of the creature
+    {
+        if (index < 0 || index >= Monsters.Count)
+            throw new ArgumentException("Can't update the team; index out of range");
+        Monsters[index] = creature;
+    }
     
     public void StoreMonster(Creature creature)
     {
-        if (Monsters.Contains(creature))
-        {
-            Monsters[creature] = (int)Monsters[creature] + 1;
-        }
-        else
-        {
-            Monsters.Add(creature, 1);
-        }
-        
+        Monsters.Add(creature);
     }
 
     public void KillMonster(Creature creature)
     {
         if (Monsters.Contains(creature))
         {
-            int count = (int)Monsters[creature];
-            if (count > 1)
-            {
-                Monsters[creature] = count - 1;
-            }
-            else
-            {
-                Monsters.Remove(creature); // Suppression de l'entrée du dictionnaire
-            }
+            Monsters.Remove(creature);
         }
         else
         {
-            Debug.Log("La créature n'existe pas dans le dictionnaire.");
+            Debug.Log("La créature n'existe pas dans la liste.");
         }
     }
     /*public void PrintValues()

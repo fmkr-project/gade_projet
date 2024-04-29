@@ -47,10 +47,10 @@ public class Bag
         switch (randomInt)
         {
             case 0:
-                GameInformation.bag.StoreItem(new ClassicOrb());
+                GameInformation.Bag.StoreItem(new ClassicOrb());
                 break;
             case 1:
-                GameInformation.bag.StoreItem(new BetterOrb());
+                GameInformation.Bag.StoreItem(new BetterOrb());
                 break;
             case 2:
                 Debug.Log("Cas 2");
@@ -66,7 +66,7 @@ public class Bag
     
     public void useItem(Item item)
     {
-        GameInformation.bag.removeitem(item);
+        GameInformation.Bag.removeitem(item);
         //ajouter l'effet de l'item utilisé
     }
 

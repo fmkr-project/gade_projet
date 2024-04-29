@@ -15,6 +15,7 @@ public class BattleSupervisor : MonoBehaviour
     // Creatures are stored in memory
     [NonSerialized] public Creature PlayerMon; // TODO must update the player's team
     [NonSerialized] public Creature EnemyMon;
+    private int _index; // Index in the list of owned creatures
     
     // Graphics (non-UI)
     [NonSerialized] public GameObject PlayerObject;
@@ -36,6 +37,7 @@ public class BattleSupervisor : MonoBehaviour
     void Awake()
     {
         _uiManager = transform.Find("/UIManager").GetComponent<BattleUIManager>();
+        _index = GameInformation.GetBattleReadyCreatureIndex();
     }
 
     private void Start()
@@ -472,5 +474,8 @@ public class BattleSupervisor : MonoBehaviour
         // Restore player prompt
         _menusLocked = false;
         _uiManager.ActionOpenMenu();
+
+        GameInformation.Squad.UpdateMonStatus(_index, PlayerMon);
+        GameInformation.SetData(null);
     }
 }

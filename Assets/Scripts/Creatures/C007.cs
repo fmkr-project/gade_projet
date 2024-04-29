@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Attacks;
 using UnityEngine;
 
 namespace Creatures
@@ -16,6 +17,13 @@ namespace Creatures
             Speed = 120;
 
             Types = new List<Type> {Type.Ground};
+            
+            LearnableAttacks = new Dictionary<int, Attack>
+            {
+                {0, new Tackle()},
+                {8, new MudSlap()},
+                {22, new Earthquake()}
+            };
         }
     }
 }
