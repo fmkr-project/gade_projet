@@ -7,6 +7,7 @@ public class GameInformation : MonoBehaviour
     public static Vector3 PlayerPosition = new Vector3(50.0f, 0.0f, 50.0f);
     public static Vector3 CameraPosition;
     public static Bag bag = new();
+    public static Squad squad = new();
 
     public static Creature GetData()
     {
