@@ -31,7 +31,9 @@ public class Creature
 
     public bool IsDead()
     {
-        return CurrentHp <= 0;
+        if (CurrentHp > 0) return false;
+        CurrentHp = 0;
+        return true;
     }
     
     // Attacks related

@@ -12,18 +12,18 @@ namespace UI
         
         public List<string> choices;
         protected GameObject Arrow;
-        private RectTransform _arrowRt;
+        protected RectTransform ArrowRt;
         protected int ArrowPosition;
 
-        private Vector2 _initialArrowPosition; // const, but is initialized at runtime
+        protected Vector2 InitialArrowPosition; // const, but is initialized at runtime
         
         protected int Step;     // y displacement
 
         protected void Awake()
         {
             Arrow = transform.Find("Arrow").gameObject;
-            _arrowRt = Arrow.GetComponent<RectTransform>();
-            _initialArrowPosition = Arrow.GetComponent<RectTransform>().anchoredPosition;
+            ArrowRt = Arrow.GetComponent<RectTransform>();
+            InitialArrowPosition = Arrow.GetComponent<RectTransform>().anchoredPosition;
             Step = (int) GetComponentInChildren<VerticalLayoutGroup>().spacing;
         }
 
@@ -53,8 +53,8 @@ namespace UI
             if (direction == 1 & ArrowPosition >= choices.Count-1) return;
             
             ArrowPosition += direction;
-            _arrowRt.anchoredPosition = new Vector2(_initialArrowPosition.x,
-                _initialArrowPosition.y - Step * ArrowPosition);
+            ArrowRt.anchoredPosition = new Vector2(InitialArrowPosition.x,
+                InitialArrowPosition.y - Step * ArrowPosition);
         }
     }
 }

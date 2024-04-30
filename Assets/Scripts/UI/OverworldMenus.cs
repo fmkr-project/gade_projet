@@ -7,6 +7,7 @@ namespace UI
     {
         private LateralMenu _lateralMenu;
         private BagMenu _bagMenu;
+        private TeamMenu _teamMenu;
         
         // Static menus
         private ObjectBox _objectMenu;
@@ -21,6 +22,8 @@ namespace UI
             _lateralMenu.CloseMenu();
             _bagMenu = FindObjectOfType<BagMenu>();
             _bagMenu.CloseMenu();
+            _teamMenu = FindObjectOfType<TeamMenu>();
+            _teamMenu.CloseMenu();
             
             // Static menus initialization
             _objectMenu = FindObjectOfType<ObjectBox>();
@@ -92,13 +95,21 @@ namespace UI
             // Actions in the lateral menu
             else if (Focus == _lateralMenu)
             {
-                // Open / close bag menu
+                // Open bag menu
                 if (_lateralMenu.GetChoice() == "SAC" && Input.GetKeyDown(KeyCode.Return))
                     // TODO enlever la variable magique
                 {
                     _bagMenu.Redraw();
                     _bagMenu.OpenMenu();
                     Focus = _bagMenu;
+                }
+                
+                // Open team menu
+                if (_lateralMenu.GetChoice() == "ÉQUIPE" && Input.GetKeyDown(KeyCode.Return))
+                {
+                    _teamMenu.OpenMenu();
+                    _teamMenu.Redraw();
+                    Focus = _teamMenu;
                 }
                 
                 // Navigate in the lateral menu
@@ -127,10 +138,24 @@ namespace UI
                     Focus = _lateralMenu;
                 }
             }
+            else if (Focus == _teamMenu)
+            {
+                // Navigate
+                if (Input.GetKeyDown(KeyCode.UpArrow)) _teamMenu.Navigate(-1);
+                if (Input.GetKeyDown(KeyCode.DownArrow)) _teamMenu.Navigate(1); // TODO unify this with Focus
+                
+                // Exit
+                if (Input.GetKeyDown(KeyCode.Backspace))
+                {
+                    _teamMenu.CloseMenu();
+                    Focus = _lateralMenu;
+                }
+            }
 
             // Update screen
             _lateralMenu.gameObject.SetActive(_lateralMenu.open);
             _bagMenu.gameObject.SetActive(_bagMenu.open);
+            _teamMenu.gameObject.SetActive(_teamMenu.open);
             _objectMenu.gameObject.SetActive(_objectMenu.open);
             _yesNoMenu.gameObject.SetActive(_yesNoMenu.open);
         }
