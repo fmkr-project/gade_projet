@@ -17,7 +17,7 @@ namespace UI
 
         protected Vector2 InitialArrowPosition; // const, but is initialized at runtime
         
-        protected int Step;     // y displacement
+        [NonSerialized] protected int Step;     // y displacement
 
         protected void Awake()
         {

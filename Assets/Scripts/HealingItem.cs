@@ -1,6 +1,6 @@
 using System;
 
-public class HealingItem : Item
+public record HealingItem : Item
 {
     public int HealedHp;
 

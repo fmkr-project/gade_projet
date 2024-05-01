@@ -26,7 +26,7 @@ namespace UI
         {
             if (choices.Count > 0) choices.Clear();
             // Initialize item list
-            foreach (var pair in Bag.Contents)
+            foreach (var pair in Bag.PrintedContents)
             {
                 choices.Add($"{pair.Key} (x{pair.Value})"); // TODO key items
             }
@@ -43,8 +43,9 @@ namespace UI
                 _textGameObjects.Clear();
             }
             
-            // TODO pages
+            // TODO pages (cf TeamMenu)
             // Print text in the menu
+            // An item is not suppressed from the list if its quantity is = 0 (easier)
             var items = transform.Find("BagMenuItems");
             var textObject = items.Find("Text");
             //var layout = items.GetComponent<VerticalLayoutGroup>();
@@ -69,6 +70,18 @@ namespace UI
             var splitted = choice.Split(' ').ToList();
             splitted.RemoveAt(splitted.Count-1);
             return String.Join(" ", splitted);
+        }
+
+        public Item GetSelectedItem()
+        {
+            try
+            {
+                return Bag.ItemLink[GetSelectedItemName()];
+            }
+            catch (KeyNotFoundException e)
+            {
+                return null;
+            }
         }
     }
 }

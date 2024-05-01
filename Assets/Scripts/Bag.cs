@@ -4,17 +4,21 @@ using UnityEngine;
 
 public class Bag
 {
-    public Dictionary<string, int> Contents = new();
+    public Dictionary<string, int> PrintedContents = new();
+    public Dictionary<string, Item> ItemLink = new();
+    // dict to obtain the original object
+    // TODO optimize this
     
     public void StoreItem(Item item)
     {
         try
         {
-            Contents[item.Name]++;
+            PrintedContents[item.Name]++;
         }
         catch (KeyNotFoundException exception)
         {
-            Contents.Add(item.Name, 1);
+            PrintedContents.Add(item.Name, 1);
+            ItemLink.Add(item.Name, item);
         }
     }
 
@@ -23,17 +27,23 @@ public class Bag
         TossItem(item.Name);
     }
 
+    public bool CanUseItem(Item item)
+    {
+        if (!PrintedContents.ContainsKey(item.Name)) return false;
+        return PrintedContents[item.Name] > 0;
+    }
+    
     public void TossItem(string itemName)
     {
-        if (!Contents.ContainsKey(itemName)) return;
-        if (Contents[itemName] <= 0) return;
-        Contents[itemName]--;
+        if (!PrintedContents.ContainsKey(itemName)) return;
+        if (PrintedContents[itemName] <= 0) return;
+        PrintedContents[itemName]--;
         //if (Contents[itemName] <= 0) Contents.Remove(itemName);
     }
 
     public void UseItem(Item item)
     {
-        if (!Contents.ContainsKey(item.Name)) return;
+        if (!PrintedContents.ContainsKey(item.Name)) return;
         
         // TODO check use (cannot use Balls outside battle)
         if (!item.Use()) return;
@@ -62,18 +72,5 @@ public class Bag
                 Debug.Log("Valeur non prévue");
                 break;
         }
-    }
-    
-    public void useItem(Item item)
-    {
-        GameInformation.Bag.removeitem(item);
-        //ajouter l'effet de l'item utilisé
-    }
-
-    public void removeitem(Item item)
-    {
-        if (!Contents.ContainsKey(item.Name)) return;
-        if (Contents[item.Name] <= 0) return;
-        Contents[item.Name]--;
     }
 }

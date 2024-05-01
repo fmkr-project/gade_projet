@@ -21,19 +21,21 @@ public class CreateTrigger : MonoBehaviour
     {
         while (true)
         {
-            
-            Transform otherTransform = player.GetComponent<Transform>();
-            Vector3 currentPosition = otherTransform.position;
-            int randomx = Random.Range(-5, 5);
-            int randomz = Random.Range(-5, 5);
+            var currentPosition = player.transform.position;
+            var randomx = Random.Range(-5, 5);
+            var randomz = Random.Range(-5, 5);
             
             // Don't spawn too close to the player
-            if (Vector2.SqrMagnitude(new Vector2(randomx, randomz)) >= 1.5)
+            if (Vector2.SqrMagnitude(new Vector2(randomx, randomz)) >= 4)
             {
                 spawnPosition = new Vector3(currentPosition.x + randomx, currentPosition.y,
                     currentPosition.z + randomz);
             }
-            GameObject clone = Instantiate(prefab, spawnPosition, spawnpoint.rotation);
+            else
+            {
+                continue;
+            }
+            var clone = Instantiate(prefab, spawnPosition, spawnpoint.rotation);
             yield return new WaitForSeconds(0.2f);
             Destroy(clone, 1.0f);
             

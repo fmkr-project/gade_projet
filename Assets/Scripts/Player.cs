@@ -12,23 +12,25 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         // debug
-        C001 creatureC001 = new C001();
-        GameInformation.Bag.StoreItem(new Objects.ClassicOrb());
-        GameInformation.Bag.StoreItem(new Objects.ClassicOrb());
-        GameInformation.Bag.StoreItem(new Objects.ClassicOrb());
-        GameInformation.Bag.StoreItem(new Objects.BetterOrb());
-        GameInformation.Bag.StoreItem(new Objects.BetterOrb());
-        
-        
-       
-        
-        
-        Debug.Log(GameInformation.Bag.Contents);
-        foreach (var kvp in GameInformation.Bag.Contents)
+        // Initialize the bag if there is nothing in it
+        // TODO improve this
+        if (GameInformation.Bag.PrintedContents.Count == 0)
+        {
+            GameInformation.Bag.StoreItem(new Objects.ClassicOrb());
+            GameInformation.Bag.StoreItem(new Objects.ClassicOrb());
+            GameInformation.Bag.StoreItem(new Objects.ClassicOrb());
+            GameInformation.Bag.StoreItem(new Objects.BetterOrb());
+            GameInformation.Bag.StoreItem(new Objects.BetterOrb());
+            GameInformation.Bag.StoreItem(new Objects.Potion());
+            GameInformation.Bag.StoreItem(new Objects.Potion());
+        }
+
+        Debug.Log(GameInformation.Bag.PrintedContents);
+        foreach (var kvp in GameInformation.Bag.PrintedContents)
         {
             Debug.Log("Clé : " + kvp.Key + ", Valeur : " + kvp.Value);
         }
-        ;
+        
         
 
     }

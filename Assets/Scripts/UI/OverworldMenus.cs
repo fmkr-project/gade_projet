@@ -11,9 +11,11 @@ namespace UI
         
         // Static menus
         private ObjectBox _objectMenu;
+        private ObjectDesc _objectDesc;
         private YesNoBox _yesNoMenu;
 
         [NonSerialized] public UpDownMenu Focus = null;
+        [NonSerialized] private UpDownMenu _previousFocus = null;
         
         // Start is called before the first frame update
         void Awake()
@@ -29,6 +31,8 @@ namespace UI
             _objectMenu = FindObjectOfType<ObjectBox>();
             _objectMenu.CloseMenu();
             _objectMenu.Redraw();
+            _objectDesc = FindObjectOfType<ObjectDesc>();
+            _objectDesc.Display(false);
             _yesNoMenu = FindObjectOfType<YesNoBox>();
             _yesNoMenu.CloseMenu();
             _yesNoMenu.Redraw();
@@ -39,15 +43,29 @@ namespace UI
         {
             // Manage static menus
             if (_objectMenu.open)
+                // Object menu was invoked by the lateral menu i.e. can only use healing items
             {
                 // Navigate
                 if (Input.GetKeyDown(KeyCode.UpArrow)) _objectMenu.Navigate(-1);
                 if (Input.GetKeyDown(KeyCode.DownArrow)) _objectMenu.Navigate(1);
                 
+                // Use an item
+                if (_objectMenu.GetChoice() == "UTILISER" && Input.GetKeyDown(KeyCode.Return))
+                {
+                    if (_bagMenu.GetSelectedItem() is not HealingItem
+                        || !GameInformation.Bag.CanUseItem(_bagMenu.GetSelectedItem())) return;
+                    // TODO inform the player (dialogue box)
+                    _teamMenu.Mode = TeamMenuMode.Select;
+                    _teamMenu.OpenMenu();
+                    _teamMenu.Redraw();
+                    _objectMenu.CloseMenu();
+                    _previousFocus = _bagMenu;
+                    Focus = _teamMenu;
+                }
+                
                 // Toss an item
                 if (_objectMenu.GetChoice() == "JETER" && Input.GetKeyDown(KeyCode.Return))
                 {
-                    print(_bagMenu.GetSelectedItemName());
                     _bagMenu.Bag.TossItem(_bagMenu.GetSelectedItemName());
                     _bagMenu.Redraw();
                     _objectMenu.CloseMenu();
@@ -101,12 +119,14 @@ namespace UI
                 {
                     _bagMenu.Redraw();
                     _bagMenu.OpenMenu();
+                    _objectDesc.SetDescription(_bagMenu.GetSelectedItem());
                     Focus = _bagMenu;
                 }
                 
                 // Open team menu
                 if (_lateralMenu.GetChoice() == "ÉQUIPE" && Input.GetKeyDown(KeyCode.Return))
                 {
+                    _teamMenu.Mode = TeamMenuMode.View;
                     _teamMenu.OpenMenu();
                     _teamMenu.Redraw();
                     Focus = _teamMenu;
@@ -121,8 +141,17 @@ namespace UI
             else if (Focus == _bagMenu)
             {
                 // Navigate
-                if (Input.GetKeyDown(KeyCode.UpArrow)) _bagMenu.Navigate(-1);
-                if (Input.GetKeyDown(KeyCode.DownArrow)) _bagMenu.Navigate(1);
+                if (Input.GetKeyDown(KeyCode.UpArrow))
+                {
+                    _bagMenu.Navigate(-1);
+                    _objectDesc.SetDescription(_bagMenu.GetSelectedItem());
+                }
+
+                if (Input.GetKeyDown(KeyCode.DownArrow))
+                {
+                    _bagMenu.Navigate(1);
+                    _objectDesc.SetDescription(_bagMenu.GetSelectedItem());
+                }
                 
                 // Select object
                 // TODO localize
@@ -132,13 +161,15 @@ namespace UI
                 }
                 
                 // Exit
-                if (_bagMenu.GetChoice() == "QUITTER" && Input.GetKeyDown(KeyCode.Return))
+                if ((_bagMenu.GetChoice() == "QUITTER" && Input.GetKeyDown(KeyCode.Return))
+                    || Input.GetKeyDown(KeyCode.Backspace))
                 {
                     _bagMenu.CloseMenu();
                     Focus = _lateralMenu;
                 }
             }
-            else if (Focus == _teamMenu)
+            else if (Focus == _teamMenu && _teamMenu.Mode == TeamMenuMode.View)
+                // Team menu was invoked from the lateral menu
             {
                 // Navigate
                 if (Input.GetKeyDown(KeyCode.UpArrow)) _teamMenu.Navigate(-1);
@@ -151,10 +182,43 @@ namespace UI
                     Focus = _lateralMenu;
                 }
             }
+            else if (Focus == _teamMenu && _teamMenu.Mode == TeamMenuMode.Select)
+                // Team menu was invoked from the Bag menu
+            // TODO other cases ?
+            {
+                // Navigate
+                if (Input.GetKeyDown(KeyCode.UpArrow)) _teamMenu.Navigate(-1);
+                if (Input.GetKeyDown(KeyCode.DownArrow)) _teamMenu.Navigate(1); // TODO unify this with Focus
+
+                // Exit
+                if (Input.GetKeyDown(KeyCode.Backspace))
+                {
+                    _teamMenu.CloseMenu();
+                    Focus = _previousFocus;
+                    _previousFocus = null;
+                }
+                
+                // Select a mon to heal
+                if (Input.GetKeyDown(KeyCode.Return))
+                {
+                    var item = (HealingItem) _bagMenu.GetSelectedItem();
+                    var restored = item.HealedHp;
+                    var newCreature = GameInformation.Squad.Monsters[_teamMenu.GetMonPosition()];
+                    newCreature.CurrentHp = Math.Min(newCreature.MaxHp, newCreature.CurrentHp + restored);
+                    GameInformation.Bag.TossItem(item);
+                    _teamMenu.UpdateMonUnderCursor(newCreature);
+                    _teamMenu.CloseMenu();
+                    _bagMenu.Redraw();
+                    Focus = _previousFocus;
+                    _previousFocus = null;
+                }
+            }
+            
 
             // Update screen
             _lateralMenu.gameObject.SetActive(_lateralMenu.open);
             _bagMenu.gameObject.SetActive(_bagMenu.open);
+            _objectDesc.gameObject.SetActive(_bagMenu.open);
             _teamMenu.gameObject.SetActive(_teamMenu.open);
             _objectMenu.gameObject.SetActive(_objectMenu.open);
             _yesNoMenu.gameObject.SetActive(_yesNoMenu.open);

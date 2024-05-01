@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using Random = System.Random;
 
-public class CaptureOrb : Item
+public record CaptureOrb : Item
 {
     public float CaptureMultiplier;
 

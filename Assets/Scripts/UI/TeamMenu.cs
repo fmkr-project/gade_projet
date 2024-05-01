@@ -6,6 +6,12 @@ using UnityEngine;
 
 namespace UI
 {
+    public enum TeamMenuMode
+    {
+        View, // view the stats of the team
+        Select // select a creature to use an object, switch...
+    }
+    
     public class TeamMenu : UpDownMenu
     {
         // Need to store info about the selected creature
@@ -16,7 +22,9 @@ namespace UI
 
         private int _firstDisplayedIndex;
 
-        protected new int Step = 110; // TODO magic vars
+        [NonSerialized] protected new int Step = 110; // TODO magic vars
+
+        [NonSerialized] public TeamMenuMode Mode = TeamMenuMode.View;
 
         private new void Awake()
         {
@@ -58,6 +66,18 @@ namespace UI
                 tracker.Redraw();
             }
 
+        }
+
+        public int GetMonPosition()
+        // Return the index of the mon to use in Select functions
+        {
+            return _firstDisplayedIndex + ArrowPosition;
+        }
+
+        public void UpdateMonUnderCursor(Creature newMon)
+        // Replace an existing mon in the collection with new data (healing etc.)
+        {
+            GameInformation.Squad.Monsters[GetMonPosition()] = newMon;
         }
         
         public new void Navigate(int direction) // TODO very ugly
