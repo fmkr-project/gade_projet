@@ -9,7 +9,9 @@ namespace UI
     public enum TeamMenuMode
     {
         View, // view the stats of the team
-        Select // select a creature to use an object, switch...
+        Select, // select a creature to use an object, switch...
+        BattleSwitch, // use a new creature for battle
+        BattleItem // use an item on a creature (uses a turn)
     }
     
     public class TeamMenu : UpDownMenu
@@ -72,6 +74,11 @@ namespace UI
         // Return the index of the mon to use in Select functions
         {
             return _firstDisplayedIndex + ArrowPosition;
+        }
+
+        public Creature GetMonUnderCursor()
+        {
+            return GameInformation.Squad.Monsters[GetMonPosition()];
         }
 
         public void UpdateMonUnderCursor(Creature newMon)

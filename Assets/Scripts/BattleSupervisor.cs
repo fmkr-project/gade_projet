@@ -33,6 +33,7 @@ public class BattleSupervisor : MonoBehaviour
     private bool _waitObjectAnimate;
     private bool _waitAttackResults;
     private bool _checkDie;
+    private bool _isDespawning;
     
     void Awake()
     {
@@ -150,6 +151,39 @@ public class BattleSupervisor : MonoBehaviour
         // Interact with the bag menu
         
         // Interact with the team menu
+        if (_uiManager.TeamMenuIsOpen())
+        {
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                _uiManager.TeamMoveUp();
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                _uiManager.TeamMoveDown();
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Backspace))
+            {
+                _uiManager.TeamCloseMenu();
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Return) && _uiManager.TeamGetMode() == TeamMenuMode.BattleSwitch)
+            {
+                var selectedMon = _uiManager.TeamGetSelectedMon();
+                if (selectedMon == PlayerMon) return;
+                _index = _uiManager.TeamGetCursorPosition();
+
+                StartCoroutine(ChangeBattlingMon(selectedMon));
+                
+                _uiManager.TeamCloseMenu();
+                
+                return;
+            }
+        }
         
         // Interact with the action menu
         if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -180,6 +214,11 @@ public class BattleSupervisor : MonoBehaviour
         {
             switch (_uiManager.ActionGetChoice())
             {
+                case "CHANGER":
+                    _uiManager.TeamSetMode(TeamMenuMode.BattleSwitch);
+                    _uiManager.TeamOpenMenu();
+                    _uiManager.TeamRedraw();
+                    break;
                 case "ATTAQUE":
                     _uiManager.AttackMenuIsOpen = true;
                     _uiManager.AttackOpenMenu();
@@ -199,6 +238,30 @@ public class BattleSupervisor : MonoBehaviour
 
     
     // Battle logic functions
+
+    private IEnumerator BattleTurnWithoutPlayer()
+    {
+        // The player does not use an attack : switch / item use
+        _uiManager.ActionCloseMenu();
+        _menusLocked = true;
+        
+        // The enemy chooses its next attack (at random)
+        _enemyChosenAttack = EnemyMon.Attacks[Random.Range(0, EnemyMon.Attacks.Count)];
+        
+        // TODO case where the player uses a Ball
+        
+        EnemyAttackAnimation();
+        while (_waitObjectAnimate) yield return new WaitForSeconds(Time.deltaTime);
+
+        EnemyAttackResults();
+        while (_waitAttackResults) yield return new WaitForSeconds(Time.deltaTime);
+            
+        StartCoroutine(CheckPlayerDie());
+        while (_checkDie) yield return new WaitForSeconds(Time.deltaTime);
+        
+        EndBattleTurn();
+        yield return null;
+    }
     
     private IEnumerator BattleTurn()
     {
@@ -316,6 +379,37 @@ public class BattleSupervisor : MonoBehaviour
         _waitObjectAnimate = false;
     }
 
+    private IEnumerator ChangeBattlingMon(Creature newMon)
+    {
+        _uiManager.NewDialogue($"{PlayerMon.Nickname} ! Reviens !");
+        _uiManager.ActionCloseMenu();
+        while (_uiManager.HasDialogueOnScreen())
+            yield return new WaitForSeconds(Time.deltaTime);
+                
+        // Update current creature info & set PlayerObject to a new prefab
+        _isDespawning = true;
+        StartCoroutine(Despawn(PlayerObject));
+        while (_isDespawning) yield return new WaitForSeconds(Time.deltaTime);
+        
+        var playerPrefab = new CreaturePrefabLoader().GetPrefabFromId(newMon.Id);
+        var newPlayerObject =
+            (GameObject) Instantiate(playerPrefab, PlayerObject.transform.position, PlayerObject.transform.rotation);
+        newPlayerObject.transform.localScale = Vector3.zero;
+        PlayerObject = newPlayerObject;
+        PlayerMon = newMon;
+        
+        _uiManager.NewDialogue($"Go ! {PlayerMon.Nickname} !");
+        // Status bar is updated to use the new active creature
+        _uiManager.FetchMonsInfo(PlayerMon, EnemyMon);
+        _uiManager.InitializeMonsInfo();
+        while (_uiManager.HasDialogueOnScreen())
+            yield return new WaitForSeconds(Time.deltaTime);
+        StartCoroutine(Spawn(PlayerObject));
+                
+        StartCoroutine(BattleTurnWithoutPlayer());
+        _uiManager.ActionOpenMenu();
+    }
+
     private IEnumerator CheckPlayerDie()
     {
         _checkDie = true;
@@ -328,16 +422,7 @@ public class BattleSupervisor : MonoBehaviour
         // Begin death animation
         _uiManager.NewDialogue($"{PlayerMon.Nickname}\nest K.O. !");
 
-        var curve = FindObjectOfType<BattleSceneLoader>().spawnCurve;
-        var elapsed = SpawnTime;
-        while (elapsed > 0)
-        {
-            var deltaTime = Time.deltaTime;
-            var delta = curve.Evaluate(elapsed);
-            PlayerObject.transform.localScale = new Vector3(delta, delta, delta);
-            elapsed -= deltaTime;
-            yield return new WaitForSeconds(deltaTime);
-        }
+        StartCoroutine(Despawn(PlayerObject));
         
         // Don't advance until the dialogue is closed
         while (_uiManager.HasDialogueOnScreen())
@@ -363,16 +448,7 @@ public class BattleSupervisor : MonoBehaviour
             : "Le ";
         _uiManager.NewDialogue($"{determinant}{EnemyMon.Nickname} ennemi\nest K.O. !");
 
-        var curve = FindObjectOfType<BattleSceneLoader>().spawnCurve;
-        var elapsed = SpawnTime;
-        while (elapsed > 0)
-        {
-            var deltaTime = Time.deltaTime;
-            var delta = curve.Evaluate(elapsed);
-            EnemyObject.transform.localScale = new Vector3(delta, delta, delta);
-            elapsed -= deltaTime;
-            yield return new WaitForSeconds(deltaTime);
-        }
+        StartCoroutine(Despawn(EnemyObject));
         
         // Don't advance until the dialogue is closed
         while (_uiManager.HasDialogueOnScreen())
@@ -381,6 +457,37 @@ public class BattleSupervisor : MonoBehaviour
         _checkDie = false;
         
         // TODO drops / XP
+    }
+
+    private IEnumerator Despawn(GameObject mon)
+    {
+        var curve = FindObjectOfType<BattleSceneLoader>().spawnCurve;
+        var elapsed = SpawnTime;
+        while (elapsed > 0)
+        {
+            var deltaTime = Time.deltaTime;
+            var delta = curve.Evaluate(elapsed);
+            mon.transform.localScale = new Vector3(delta, delta, delta);
+            elapsed -= deltaTime;
+            yield return new WaitForSeconds(deltaTime);
+        }
+
+        _isDespawning = false;
+    }
+
+    private IEnumerator Spawn(GameObject mon)
+    {
+        var curve = FindObjectOfType<BattleSceneLoader>().spawnCurve;
+        var elapsed = 0f;
+        while (elapsed < SpawnTime)
+        {
+            print(elapsed);
+            var deltaTime = Time.deltaTime;
+            var delta = curve.Evaluate(elapsed);
+            mon.transform.localScale = new Vector3(delta, delta, delta);
+            elapsed += deltaTime;
+            yield return new WaitForSeconds(deltaTime);
+        }
     }
     
     private IEnumerator EnemyAttacks()

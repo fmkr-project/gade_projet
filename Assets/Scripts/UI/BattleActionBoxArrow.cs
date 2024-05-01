@@ -34,8 +34,8 @@ namespace UI
         public string ReturnChoice()
         {
             return
-                _arrowPosition.x == 0 ? _arrowPosition.y == 0 ? "ATTAQUE" : "CHANGER"
-                : _arrowPosition.y == 0 ? "SAC" : "FUITE";
+                _arrowPosition.y == 0 ? _arrowPosition.x == 0 ? "ATTAQUE" : "CHANGER"
+                : _arrowPosition.x == 0 ? "SAC" : "FUITE";
         }
     }
 }

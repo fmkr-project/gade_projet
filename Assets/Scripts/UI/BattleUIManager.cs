@@ -21,6 +21,8 @@ namespace UI
         private PlayerBattleFrame _playerInfo;
         private EnemyBattleFrame _enemyInfo;
 
+        private TeamMenu _teamMenu;
+
         private Fader _fader;
         private const float FadeTime = 0.6f;
         
@@ -48,6 +50,9 @@ namespace UI
 
             _playerInfo = GetComponentInChildren<PlayerBattleFrame>();
             _enemyInfo = GetComponentInChildren<EnemyBattleFrame>();
+
+            _teamMenu = GetComponentInChildren<TeamMenu>();
+            _teamMenu.gameObject.SetActive(false);
 
             _fader = transform.Find("Canvas/Fader").GetComponent<Fader>();
             _fader.gameObject.SetActive(true);
@@ -83,12 +88,6 @@ namespace UI
         public void ReloadEnemyMonInfo()
         {
             _enemyInfo.Redraw();
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            // TODO lock inputs
         }
 
         public void LoadPlayerMonPrompt(Creature playerMon)
@@ -228,6 +227,59 @@ namespace UI
         {
             return AttackGetChoice() != "-" && AttackGetChoice() != "RETOUR" ?
             usedMon.Attacks[_attackBoxArrow.ArrowPosition] : null;
+        }
+        
+        // Team menu
+        public bool TeamMenuIsOpen()
+        {
+            return _teamMenu.open;
+        }
+
+        public void TeamMoveUp()
+        {
+            _teamMenu.Navigate(-1);
+        }
+
+        public void TeamMoveDown()
+        {
+            _teamMenu.Navigate(1);
+        }
+
+        public void TeamOpenMenu()
+        {
+            _teamMenu.gameObject.SetActive(true);
+            _teamMenu.OpenMenu();
+        }
+
+        public void TeamCloseMenu()
+        {
+            _teamMenu.CloseMenu();
+            _teamMenu.gameObject.SetActive(false);
+        }
+
+        public void TeamRedraw()
+        {
+            _teamMenu.Redraw();
+        }
+
+        public TeamMenuMode TeamGetMode()
+        {
+            return _teamMenu.Mode;
+        }
+
+        public void TeamSetMode(TeamMenuMode mode)
+        {
+            _teamMenu.Mode = mode;
+        }
+
+        public Creature TeamGetSelectedMon()
+        {
+            return _teamMenu.GetMonUnderCursor();
+        }
+
+        public int TeamGetCursorPosition()
+        {
+            return _teamMenu.GetMonPosition();
         }
 
     }
