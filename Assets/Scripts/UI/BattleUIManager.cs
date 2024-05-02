@@ -22,9 +22,12 @@ namespace UI
         private EnemyBattleFrame _enemyInfo;
 
         private TeamMenu _teamMenu;
-
+        private BagMenu _bagMenu;
+        private ObjectBox _objectBox;
+        private ObjectDesc _objectDesc;
+        
         private Fader _fader;
-        private const float FadeTime = 0.6f;
+        private const float FadeTime = 0.45f;
         
         // Arrows
         private BattleActionBoxArrow _actionBoxArrow;
@@ -53,6 +56,12 @@ namespace UI
 
             _teamMenu = GetComponentInChildren<TeamMenu>();
             _teamMenu.gameObject.SetActive(false);
+            _bagMenu = GetComponentInChildren<BagMenu>();
+            _bagMenu.gameObject.SetActive(false);
+            _objectBox = GetComponentInChildren<ObjectBox>();
+            _objectBox.gameObject.SetActive(false);
+            _objectDesc = GetComponentInChildren<ObjectDesc>();
+            _objectDesc.gameObject.SetActive(false);
 
             _fader = transform.Find("Canvas/Fader").GetComponent<Fader>();
             _fader.gameObject.SetActive(true);
@@ -160,9 +169,9 @@ namespace UI
             return _actionBoxArrow.ReturnChoice();
         }
 
-        public void ActionFlee()
+        public IEnumerator ActionFlee()
         {
-            StartCoroutine(_fader.FadeOut(FadeTime));
+            yield return _fader.FadeOut(FadeTime);
             
             SceneManager.LoadScene("Overworld");
         }
@@ -282,5 +291,88 @@ namespace UI
             return _teamMenu.GetMonPosition();
         }
 
+        // Bag menu
+        public void BagRedraw()
+        {
+            _bagMenu.Redraw();
+            _objectDesc.SetDescription(BagGetSelectedItem());
+        }
+        
+        public void BagOpenMenu()
+        {
+            _bagMenu.OpenMenu();
+            _bagMenu.gameObject.SetActive(true);
+            _objectDesc.gameObject.SetActive(true);
+        }
+
+        public void BagCloseMenu()
+        {
+            _bagMenu.CloseMenu();
+            _bagMenu.gameObject.SetActive(false);
+            _objectDesc.gameObject.SetActive(false);
+        }
+
+        public bool BagMenuIsOpen()
+        {
+            return _bagMenu.open;
+        }
+
+        public void BagMoveUp()
+        {
+            _bagMenu.Navigate(-1);
+            BagRedraw();
+        }
+
+        public void BagMoveDown()
+        {
+            _bagMenu.Navigate(1);
+            BagRedraw();
+        }
+
+        public Item BagGetSelectedItem()
+        {
+            return _bagMenu.GetSelectedItem();
+        }
+        
+        // Object menu
+        public void ObjectRedraw()
+        {
+            _objectBox.Redraw();
+        }
+        
+        public void ObjectOpenMenu()
+        {
+            _objectBox.OpenMenu();
+            _objectBox.Redraw();
+            _objectBox.gameObject.SetActive(true);
+        }
+
+        public void ObjectCloseMenu()
+        {
+            _objectBox.CloseMenu();
+            _objectBox.gameObject.SetActive(false);
+        }
+
+        public bool ObjectMenuIsOpen()
+        {
+            return _objectBox.open;
+        }
+
+        public string ObjectGetChoice()
+        {
+            return _objectBox.GetChoice();
+        }
+
+        public void ObjectMoveUp()
+        {
+            _objectBox.Navigate(-1);
+            _objectBox.Redraw();
+        }
+
+        public void ObjectMoveDown()
+        {
+            _objectBox.Navigate(1);
+            _objectBox.Redraw();
+        }
     }
 }

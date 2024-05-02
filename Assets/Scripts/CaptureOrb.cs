@@ -27,7 +27,7 @@ public record CaptureOrb : Item
                 // TODO animate shakes (1 check passed = 1 shake, etc.)
                 return false;
             }
-            System.Threading.Thread.Sleep(800); // Visual wait
+            //System.Threading.Thread.Sleep(800); // Visual wait
         }
         
         // Capture success

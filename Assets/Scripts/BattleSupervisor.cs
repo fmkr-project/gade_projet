@@ -20,6 +20,7 @@ public class BattleSupervisor : MonoBehaviour
     // Graphics (non-UI)
     [NonSerialized] public GameObject PlayerObject;
     [NonSerialized] public GameObject EnemyObject;
+    private GameObject _orbObject;
 
     private const float BonkDuration = 0.2f; // Attack animation duration
     private const float BonkDistance = 0.5f;
@@ -34,6 +35,7 @@ public class BattleSupervisor : MonoBehaviour
     private bool _waitAttackResults;
     private bool _checkDie;
     private bool _isDespawning;
+    private bool _battleWon;
     
     void Awake()
     {
@@ -67,8 +69,15 @@ public class BattleSupervisor : MonoBehaviour
     // Supervisor manages keypresses
     void Update()
     {
-        // Priority : battle turn = dialogue > object usage > attack = bag = team > action
+        // Priority : victory check > battle turn = dialogue > team (select)
+        // > object usage > attack = bag = team (switch) > action
 
+        if (_battleWon)
+            // Battle logic stops
+        {
+            return;
+        }
+        
         if (_readyForBattle)
         {
             StartCoroutine(BattleTurn());
@@ -89,8 +98,7 @@ public class BattleSupervisor : MonoBehaviour
                 if (_willFlee)
                 {
                     _willFlee = false;
-                    _uiManager.ActionFlee();
-                    // TODO destroy this scene
+                    StartCoroutine(_uiManager.ActionFlee());
                     return;
                 }
                 _uiManager.DialogueClose();
@@ -102,7 +110,110 @@ public class BattleSupervisor : MonoBehaviour
         // Can't use menus during a battle turn
         if (_menusLocked) return; 
         
+        // Interact with the team menu (select target mon mode)
+        // TODO unify with BattleSwitch mode
+        if (_uiManager.TeamMenuIsOpen() && _uiManager.TeamGetMode() == TeamMenuMode.BattleItem)
+        {
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                _uiManager.TeamMoveUp();
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                _uiManager.TeamMoveDown();
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Backspace))
+            {
+                _uiManager.TeamCloseMenu();
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                var selectedMon = _uiManager.TeamGetSelectedMon();
+                _index = _uiManager.TeamGetCursorPosition();
+
+                var item = _uiManager.BagGetSelectedItem();
+                switch (item)
+                    // is the same since the bag can't be interacted with
+                {
+                    case HealingItem potion:
+                        if (selectedMon.CurrentHp == selectedMon.MaxHp) return;
+                        selectedMon.Heal(potion);
+                        StartCoroutine(UseHealingItem(selectedMon, potion));
+                        _uiManager.TeamRedraw();
+                        break;
+                }
+
+                _uiManager.ObjectCloseMenu();
+                _uiManager.BagCloseMenu();
+                _uiManager.TeamCloseMenu();
+
+                StartCoroutine(BattleTurnWithoutPlayer());
+                return;
+            }
+        }
+        
         // Interact with the object menu
+        if (_uiManager.ObjectMenuIsOpen())
+        {
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                _uiManager.ObjectMoveUp();
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                _uiManager.ObjectMoveDown();
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Backspace))
+            {
+                _uiManager.ObjectCloseMenu();
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                var item = _uiManager.BagGetSelectedItem();
+                switch (_uiManager.ObjectGetChoice())
+                {
+                    case "RETOUR":
+                        _uiManager.ObjectCloseMenu();
+                        break;
+                    case "JETER":
+                        GameInformation.Bag.TossItem(item);
+                        _uiManager.BagRedraw();
+                        _uiManager.ObjectCloseMenu();
+                        break;
+                    case "UTILISER":
+                        if (item is HealingItem)
+                        {
+                            _uiManager.TeamSetMode(TeamMenuMode.BattleItem);
+                            _uiManager.TeamOpenMenu();
+                            _uiManager.TeamRedraw();
+                            return;
+                        }
+
+                        if (item is CaptureOrb)
+                        {
+                            //todo
+                        }
+
+                        GameInformation.Bag.TossItem(item);
+                        break;
+                    default:
+                        Debug.LogWarning("should not happen");
+                        break;
+                }
+            }
+        }
         
         // Interact with the attack menu
         if (_uiManager.AttackMenuIsOpen)
@@ -149,9 +260,41 @@ public class BattleSupervisor : MonoBehaviour
         }
         
         // Interact with the bag menu
+        if (_uiManager.BagMenuIsOpen())
+        {
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                _uiManager.BagMoveUp();
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                _uiManager.BagMoveDown();
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                if (_uiManager.BagGetSelectedItem() is null)
+                {
+                    _uiManager.BagCloseMenu();
+                    return;
+                }
+
+                _uiManager.ObjectOpenMenu();
+                return;
+            }
+            
+            if (Input.GetKeyDown(KeyCode.Backspace))
+            {
+                _uiManager.BagCloseMenu();
+                return;
+            }
+        }
         
-        // Interact with the team menu
-        if (_uiManager.TeamMenuIsOpen())
+        // Interact with the team menu (switch mon mode)
+        if (_uiManager.TeamMenuIsOpen() && _uiManager.TeamGetMode() == TeamMenuMode.BattleSwitch)
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
@@ -171,7 +314,7 @@ public class BattleSupervisor : MonoBehaviour
                 return;
             }
 
-            if (Input.GetKeyDown(KeyCode.Return) && _uiManager.TeamGetMode() == TeamMenuMode.BattleSwitch)
+            if (Input.GetKeyDown(KeyCode.Return))
             {
                 var selectedMon = _uiManager.TeamGetSelectedMon();
                 if (selectedMon == PlayerMon) return;
@@ -224,6 +367,10 @@ public class BattleSupervisor : MonoBehaviour
                     _uiManager.AttackOpenMenu();
                     _uiManager.AttackInfoRedraw(PlayerMon);
                     break;
+                case "SAC":
+                    _uiManager.BagOpenMenu();
+                    _uiManager.BagRedraw();
+                    break;
                 case "FUITE":
                     _willFlee = true;
                     _uiManager.NewDialogue("Vous prenez la fuite !\n ");
@@ -241,6 +388,13 @@ public class BattleSupervisor : MonoBehaviour
 
     private IEnumerator BattleTurnWithoutPlayer()
     {
+        while (_uiManager.HasDialogueOnScreen())
+            yield return new WaitForSeconds(Time.deltaTime);
+        
+        // Refresh displays
+        _uiManager.ReloadPlayerMonInfo();
+        _uiManager.ReloadEnemyMonInfo();
+        
         // The player does not use an attack : switch / item use
         _uiManager.ActionCloseMenu();
         _menusLocked = true;
@@ -283,6 +437,8 @@ public class BattleSupervisor : MonoBehaviour
             
             StartCoroutine(CheckEnemyDie());
             while (_checkDie) yield return new WaitForSeconds(Time.deltaTime);
+            
+            if (_battleWon) yield break;
             
             EnemyAttackAnimation();
             while (_waitObjectAnimate) yield return new WaitForSeconds(Time.deltaTime);
@@ -359,7 +515,7 @@ public class BattleSupervisor : MonoBehaviour
         while (elapsed < BonkDuration / 2)
         {
             var deltaTime = Time.deltaTime;
-            PlayerObject.transform.position = new(initialPos.x, initialPos.y,
+            PlayerObject.transform.position = new Vector3(initialPos.x, initialPos.y,
                 initialPos.z + (2 * elapsed / BonkDuration) * BonkDistance);
             elapsed += deltaTime;
             yield return new WaitForSeconds(deltaTime);
@@ -391,7 +547,7 @@ public class BattleSupervisor : MonoBehaviour
         StartCoroutine(Despawn(PlayerObject));
         while (_isDespawning) yield return new WaitForSeconds(Time.deltaTime);
         
-        var playerPrefab = new CreaturePrefabLoader().GetPrefabFromId(newMon.Id);
+        var playerPrefab = CreaturePrefabLoader.GetPrefabFromId(newMon.Id);
         var newPlayerObject =
             (GameObject) Instantiate(playerPrefab, PlayerObject.transform.position, PlayerObject.transform.rotation);
         newPlayerObject.transform.localScale = Vector3.zero;
@@ -408,6 +564,24 @@ public class BattleSupervisor : MonoBehaviour
                 
         StartCoroutine(BattleTurnWithoutPlayer());
         _uiManager.ActionOpenMenu();
+    }
+
+    private IEnumerator UseHealingItem(Creature target, HealingItem potion)
+    {
+        _uiManager.NewDialogue($"{target.Nickname}\nrécupère des PV !");
+        while (_uiManager.HasDialogueOnScreen())
+            yield return new WaitForSeconds(Time.deltaTime);
+    }
+
+    private void OrbAnimation(CaptureOrb usedOrb)
+    {
+        _uiManager.NewDialogue($"Vous lancez une {usedOrb.Name} !");
+        var orbPrefab = OrbPrefabLoader.GetOrbObject(usedOrb);
+        _orbObject = (GameObject)
+            Instantiate(orbPrefab, EnemyObject.transform.position, EnemyObject.transform.rotation);
+        _orbObject.transform.localScale = Vector3.zero;
+        StartCoroutine(Spawn(_orbObject));
+        StartCoroutine(Despawn(EnemyObject));
     }
 
     private IEnumerator CheckPlayerDie()
@@ -455,8 +629,10 @@ public class BattleSupervisor : MonoBehaviour
             yield return new WaitForSeconds(Time.deltaTime);
 
         _checkDie = false;
-        
-        // TODO drops / XP
+
+        _uiManager.NewDialogue("Object event.");
+        StartCoroutine(_uiManager.ActionFlee());
+        _battleWon = true;
     }
 
     private IEnumerator Despawn(GameObject mon)

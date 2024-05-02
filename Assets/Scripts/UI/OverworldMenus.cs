@@ -72,7 +72,8 @@ namespace UI
                 }
                 
                 // Exit
-                if (_objectMenu.GetChoice() == "RETOUR" && Input.GetKeyDown(KeyCode.Return))
+                if ((_objectMenu.GetChoice() == "RETOUR" && Input.GetKeyDown(KeyCode.Return))
+                    || Input.GetKeyDown(KeyCode.Backspace))
                 {
                     _objectMenu.CloseMenu();
                 }
@@ -204,9 +205,12 @@ namespace UI
                     var item = (HealingItem) _bagMenu.GetSelectedItem();
                     var restored = item.HealedHp;
                     var newCreature = GameInformation.Squad.Monsters[_teamMenu.GetMonPosition()];
-                    newCreature.CurrentHp = Math.Min(newCreature.MaxHp, newCreature.CurrentHp + restored);
-                    GameInformation.Bag.TossItem(item);
-                    _teamMenu.UpdateMonUnderCursor(newCreature);
+                    if (newCreature.CurrentHp != newCreature.MaxHp)
+                    {
+                        newCreature.CurrentHp = Math.Min(newCreature.MaxHp, newCreature.CurrentHp + restored);
+                        GameInformation.Bag.TossItem(item);
+                        _teamMenu.UpdateMonUnderCursor(newCreature);
+                    }
                     _teamMenu.CloseMenu();
                     _bagMenu.Redraw();
                     Focus = _previousFocus;

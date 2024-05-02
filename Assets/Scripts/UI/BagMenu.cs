@@ -13,17 +13,15 @@ namespace UI
         private int _maxPrintableItems;
         private List<GameObject> _textGameObjects = new();
 
-        private Player _player;
-
         private void Start()
         {
-            _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
             Bag = GameInformation.Bag;
         }
         
         public void Redraw()
         // Redraw when the player uses an item
         {
+            Start();
             if (choices.Count > 0) choices.Clear();
             // Initialize item list
             foreach (var pair in Bag.PrintedContents)

@@ -4,7 +4,7 @@ using Object = UnityEngine.Object;
 
 public class CreaturePrefabLoader
 {
-    public Object GetPrefabFromId(int creatureId)
+    public static Object GetPrefabFromId(int creatureId)
     // Return the prefab of a creature given an ID
     {
         var assetName = creatureId.ToString("D3");

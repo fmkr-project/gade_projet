@@ -32,9 +32,8 @@ public class BattleSceneLoader : MonoBehaviour
         }
         
         // Graphics
-        var prefabLoader = new CreaturePrefabLoader();
-        var playerPrefab = prefabLoader.GetPrefabFromId(supervisor.PlayerMon.Id);
-        var enemyPrefab = prefabLoader.GetPrefabFromId(supervisor.EnemyMon.Id);
+        var playerPrefab = CreaturePrefabLoader.GetPrefabFromId(supervisor.PlayerMon.Id);
+        var enemyPrefab = CreaturePrefabLoader.GetPrefabFromId(supervisor.EnemyMon.Id);
         var spawnTime = 0.6f; // temp, TODO do a cleaner version of this
         _enemyObject = (GameObject) Instantiate(enemyPrefab, enemyBase.position,
             Quaternion.Euler(0, 180, 0));
