@@ -1,10 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using UI;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.SceneManagement;
-
+using UI;
 
 public class PlayerMover : MonoBehaviour
 {
@@ -12,9 +10,8 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private float sprintSpeed = 6f;
     private NavMeshAgent _agent;
     private SceneTransition _sceneTransition;
-
     private OverworldMenus _menus;
-    
+    private Animator _animator; // Ajoutez une variable pour l'Animator
     
     // Start is called before the first frame update
     void Awake()
@@ -22,14 +19,15 @@ public class PlayerMover : MonoBehaviour
         _sceneTransition = GetComponent<SceneTransition>();
         _agent = GetComponent<NavMeshAgent>();
         _menus = FindObjectOfType<OverworldMenus>();
+        _animator = GetComponent<Animator>(); // Attribuer la référence à l'Animator
     }
 
     // Update is called once per frame
     void Update()
     {
-        
         if (_sceneTransition.isMovable && _menus.Focus is null)
         {
+            Debug.Log(_agent.velocity.magnitude);
             var deltaTime = Time.deltaTime;
             var horizontalMove = Input.GetAxis("Horizontal");
             var verticalMove = Input.GetAxis("Vertical");
@@ -40,11 +38,15 @@ public class PlayerMover : MonoBehaviour
             var displacement = Vector3.forward * verticalMove + Vector3.right * horizontalMove;
             _agent.SetDestination(transform.position + displacement);
 
-
-        }
-            
-        
+            // Vérifiez si le joueur se déplace et déclenchez l'animation
+            if (_agent.velocity.magnitude > 0)
+            {
+                _animator.SetBool("isMoving", true);
+            }
+            else
+            {
+                _animator.SetBool("isMoving", false); // Assurez-vous que le trigger est réinitialisé lorsque le joueur ne se déplace pas
+            }
+        }      
     }
-    
-    
 }
