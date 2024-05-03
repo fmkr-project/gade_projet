@@ -45,8 +45,9 @@ public class PlayerMover : MonoBehaviour
             }
             else
             {
-                _animator.SetBool("isMoving", false); // Assurez-vous que le trigger est réinitialisé lorsque le joueur ne se déplace pas
+                _animator.SetBool("isMoving", false);// Assurez-vous que le trigger est réinitialisé lorsque le joueur ne se déplace pas
             }
+            
         }      
     }
 }
