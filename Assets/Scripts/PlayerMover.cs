@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +21,13 @@ public class PlayerMover : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
         _menus = FindObjectOfType<OverworldMenus>();
         _animator = GetComponent<Animator>(); // Attribuer la référence à l'Animator
+        
+        
+    }
+
+    private void Start()
+    {
+        _animator.Play("Idle 0");
     }
 
     // Update is called once per frame
