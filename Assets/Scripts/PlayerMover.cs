@@ -47,7 +47,10 @@ public class PlayerMover : MonoBehaviour
             {
                 _animator.SetBool("isMoving", false);// Assurez-vous que le trigger est réinitialisé lorsque le joueur ne se déplace pas
             }
-            
-        }      
+        }
+        else
+        {
+            _animator.Play("Idle 0");
+        }
     }
 }
