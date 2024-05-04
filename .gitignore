@@ -21,6 +21,8 @@
 # /[Aa]ssets/AssetStoreTools*
 
 # Store assets
+/[Aa]ssets/Blink
+/[Aa]ssets/BOKI
 /[Aa]ssets/BrokenVector
 /[Aa]ssets/WoodsLifestyle
 
