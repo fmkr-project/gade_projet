@@ -164,6 +164,11 @@ namespace UI
             }
         }
 
+        public bool ActionMenuIsOpen()
+        {
+            return _actionBox.gameObject.activeSelf;
+        }
+
         public string ActionGetChoice()
         {
             return _actionBoxArrow.ReturnChoice();

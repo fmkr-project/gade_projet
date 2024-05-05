@@ -24,6 +24,8 @@ namespace Creatures
                 {8, new MudSlap()},
                 {22, new Earthquake()}
             };
+
+            CatchRate = 100;
         }
     }
 }

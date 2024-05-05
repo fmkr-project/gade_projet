@@ -1,12 +1,12 @@
 namespace Objects
 {
-    public record BetterOrb : CaptureOrb
+    public record BetterBetterOrb : CaptureOrb
     {
-        public BetterOrb()
+        public BetterBetterOrb()
         {
             Name = "ORBE MIEUX";
             Description = "Une orbe de meilleure qualité que l'ORBE USUELLE.";
-            CaptureMultiplier = 1.5f;
+            CaptureMultiplier = 2f;
         }
     }
 }

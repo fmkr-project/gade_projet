@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseCreatureData
+public class BaseCreatureData // TODO switch to records
 {
     public int Id;
     public string Nickname;
@@ -12,5 +12,6 @@ public class BaseCreatureData
     public int Speed;
     public List<Type> Types;
     public Dictionary<int, Attack> LearnableAttacks;
-    
+
+    public int CatchRate;
 }

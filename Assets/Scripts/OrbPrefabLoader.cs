@@ -2,12 +2,12 @@ using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-public class OrbPrefabLoader
+public static class OrbPrefabLoader
 {
-    public static Object GetOrbObject(CaptureOrb orb)
+    public static GameObject GetOrbObject(CaptureOrb orb)
     {
         var assetName = orb.GetType().Name;
-        var prefab = Resources.Load($"Orbs/{assetName}");
+        var prefab = Resources.Load<GameObject>($"Orbs/{assetName}");
 
         if (prefab is null)
         {

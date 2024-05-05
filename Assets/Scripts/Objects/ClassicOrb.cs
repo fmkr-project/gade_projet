@@ -4,8 +4,8 @@ namespace Objects
     {
         public ClassicOrb()
         {
-            Name = "feur";
-            Description = "TODO";
+            Name = "ORBE USUELLE";
+            Description = "Une orbe pour capturer des Créatures. Efficacité limitée.";
             CaptureMultiplier = 1f;
         }
     }

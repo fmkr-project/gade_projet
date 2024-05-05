@@ -53,6 +53,7 @@ namespace UI
                  i < _firstDisplayedIndex + 6 && i < GameInformation.Squad.Monsters.Count;
                  i++)
             {
+                print(i);
                 var newTrackerObject = Instantiate(_baseMonTrackerObject, items);
                 newTrackerObject.SetActive(true);
                 _choicesObjects.Add(newTrackerObject);
@@ -62,12 +63,18 @@ namespace UI
                 choices.Add(newTracker);
             }
             
-            // Refresh display AFTER initializing!
+            // Refresh display AFTER initializing everything!
             foreach (var tracker in choices)
             {
                 tracker.Redraw();
             }
 
+        }
+
+        public new void OpenMenu()
+        {
+            base.OpenMenu();
+            Redraw();
         }
 
         public int GetMonPosition()
@@ -97,12 +104,12 @@ namespace UI
                 return;
             }
 
-            if (direction == 1 & ArrowPosition >= choices.Count) return;
+            if (direction == 1 & ArrowPosition >= GameInformation.Squad.Monsters.Count) return;
 
             if (direction == 1 & ArrowPosition >= 5)
                 // at this point there are more than 6 creatures in the inventory
             {
-                if (_firstDisplayedIndex > choices.Count - 6) return;
+                if (_firstDisplayedIndex > GameInformation.Squad.Monsters.Count - 6) return;
                 _firstDisplayedIndex++;
                 Redraw();
                 return;

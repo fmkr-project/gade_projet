@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 [Serializable]
@@ -23,6 +24,8 @@ public class Creature
     [NonSerialized] public int SpeedBuff;
     [NonSerialized] public int AccuracyBuff;
     [NonSerialized] public int CriticalBuff;
+
+    [NonSerialized] public int CatchRate;
 
     private void ModifyHp(int hp)
     {
@@ -83,11 +86,10 @@ public class Creature
     public float GetModifiedCatchRate(CaptureOrb ball)
     // Cf Bulbapedia
     {
-        var baseValue = 1 - 2 * CurrentHp / 3 / MaxHp;
-        var creatureCatchRate = 1f; // TODO plusieurs valeurs
+        var baseValue = (float) (3.0 * MaxHp - 2 * CurrentHp) / (3 * MaxHp);
         var ballBonus = ball.CaptureMultiplier;
-
-        return baseValue * creatureCatchRate * ballBonus;
+        
+        return baseValue * CatchRate * ballBonus;
     }
 
 }
