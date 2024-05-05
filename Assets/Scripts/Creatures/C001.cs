@@ -21,8 +21,10 @@ namespace Creatures
             LearnableAttacks = new Dictionary<int, Attack>
             {
                 {0, new Tackle()},
-                {8, new MudSlap()},
-                {22, new Earthquake()}
+                {9, new Magnitude()},
+                {25, new MudSlap()},
+                {33, new Slash()},
+                {41, new Earthquake()}
             };
 
             CatchRate = 255;

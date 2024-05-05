@@ -41,6 +41,7 @@ public class BattleSupervisor : MonoBehaviour
     private bool _battleWon;
     private bool _isCapturing;
     private bool _orbIsBouncing;
+    private bool _monChangeForced; // previous mon died
     
     private float BoingFunction(float x)
     {
@@ -489,6 +490,12 @@ public class BattleSupervisor : MonoBehaviour
             StartCoroutine(CheckPlayerDie());
             while (_checkDie) yield return new WaitForSeconds(Time.deltaTime);
 
+            if (_monChangeForced) // end turn early if previous mon died
+            {
+                EndBattleTurn();
+                yield break;
+            }
+
             PlayerAttackAnimation();
             while (_waitObjectAnimate) yield return new WaitForSeconds(Time.deltaTime);
 
@@ -585,6 +592,7 @@ public class BattleSupervisor : MonoBehaviour
         // Status bar is updated to use the new active creature
         _uiManager.FetchMonsInfo(PlayerMon, EnemyMon);
         _uiManager.InitializeMonsInfo();
+        _uiManager.LoadPlayerMonPrompt(PlayerMon);
         while (_uiManager.HasDialogueOnScreen())
             yield return new WaitForSeconds(Time.deltaTime);
         StartCoroutine(Spawn(PlayerObject));
@@ -664,6 +672,8 @@ public class BattleSupervisor : MonoBehaviour
         
         // Capture success / update team info
         _uiManager.NewDialogue($"{EnemyMon.Nickname}\nest capturé !");
+        PlayerMon.ResetStatusAlterations();
+        EnemyMon.ResetStatusAlterations();
         GameInformation.Squad.StoreMonster(EnemyMon);
         while (_uiManager.HasDialogueOnScreen())
             yield return new WaitForSeconds(Time.deltaTime);
@@ -691,9 +701,34 @@ public class BattleSupervisor : MonoBehaviour
         while (_uiManager.HasDialogueOnScreen())
             yield return new WaitForSeconds(Time.deltaTime);
 
-        _checkDie = false;
+
+        var nextMonInfo = GameInformation.Squad.GetBattleReadyCreature();
+        if (nextMonInfo.Item1 == -1) // No mons left -> game over
+        {
+            StartCoroutine(_uiManager.ActionGameOver());
+            yield break;
+        }
+
+        PlayerMon = nextMonInfo.Item2;
         
-        // TODO restart with another creature
+        _uiManager.NewDialogue($"Go ! {PlayerMon.Nickname} !");
+        // Don't advance until the dialogue is closed
+        while (_uiManager.HasDialogueOnScreen())
+            yield return new WaitForSeconds(Time.deltaTime);
+        var playerPrefab = CreaturePrefabLoader.GetPrefabFromId(PlayerMon.Id);
+        var newPlayerObject =
+            (GameObject) Instantiate(playerPrefab, PlayerObject.transform.position, PlayerObject.transform.rotation);
+        newPlayerObject.transform.localScale = Vector3.zero;
+        PlayerObject = newPlayerObject;
+        StartCoroutine(Spawn(PlayerObject));
+        
+        // Status bar is updated to use the new active creature
+        _uiManager.FetchMonsInfo(PlayerMon, EnemyMon);
+        _uiManager.InitializeMonsInfo();
+        _uiManager.LoadPlayerMonPrompt(PlayerMon);
+
+        _monChangeForced = true;
+        _checkDie = false;
     }
     
     private IEnumerator CheckEnemyDie()
@@ -722,6 +757,10 @@ public class BattleSupervisor : MonoBehaviour
         _uiManager.NewDialogue("Object event.");
         StartCoroutine(_uiManager.ActionFlee());
         _battleWon = true;
+        
+        // Reset mon status alterations
+        PlayerMon.ResetStatusAlterations();
+        EnemyMon.ResetStatusAlterations();
     }
 
     private IEnumerator Despawn(GameObject mon)

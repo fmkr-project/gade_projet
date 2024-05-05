@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -19,6 +20,7 @@ namespace UI
         // Need to store info about the selected creature
         [NonSerialized] public new List<TeamMenuMonTracker> choices = new();
         private List<GameObject> _choicesObjects = new();
+        private TextMeshProUGUI _monStats;
 
         private GameObject _baseMonTrackerObject;
 
@@ -33,6 +35,7 @@ namespace UI
             base.Awake();
             _baseMonTrackerObject = GameObject.Find("TeamMenuItems/MonTracker");
             _baseMonTrackerObject.gameObject.SetActive(false);
+            _monStats = GameObject.Find("StatsMenu/StatsText").GetComponent<TextMeshProUGUI>();
         }
         
         public void Redraw()
@@ -69,6 +72,18 @@ namespace UI
                 tracker.Redraw();
             }
 
+            UpdateStats();
+        }
+
+        private void UpdateStats()
+        {
+            // Update displayed mon stats
+            var data = GetMonUnderCursor();
+            var typesToString =
+                data.Types.Aggregate("", (current, type) => current + (TypeToString.Convert(type) + '\n'));
+            _monStats.text =
+                $"{typesToString}\nATK {data.Attack}\n" +
+                $"DEF {data.Defense}\nVIT {data.Speed}";
         }
 
         public new void OpenMenu()
@@ -118,6 +133,7 @@ namespace UI
             ArrowPosition += direction;
             ArrowRt.anchoredPosition = new Vector2(InitialArrowPosition.x,
                 InitialArrowPosition.y - Step * ArrowPosition);
+            UpdateStats();
         }
     }
 }

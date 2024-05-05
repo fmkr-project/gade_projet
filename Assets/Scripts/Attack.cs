@@ -8,9 +8,9 @@ public enum StatusAttackTarget // a normal attack always targets the enemy
 public abstract record Attack
 {
     // Attack that cannot miss (+ status)
-    public static int CannotMiss = int.MaxValue;
+    public static int CannotMiss = 99999;
     // One-hit KO
-    public static int OHKO = int.MaxValue;
+    public static int OHKO = 99999;
     
     public string Name = "??????????"; // Placeholder in case the name is not implemented
     public string Desc = "";

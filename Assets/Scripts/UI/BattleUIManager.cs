@@ -180,6 +180,12 @@ namespace UI
             
             SceneManager.LoadScene("Overworld");
         }
+
+        public IEnumerator ActionGameOver()
+        {
+            yield return _fader.FadeOut(FadeTime);
+            SceneManager.LoadScene("GameOver");
+        }
         
         // Attack box
         public void AttackInitializeDraw(Creature playerMon)

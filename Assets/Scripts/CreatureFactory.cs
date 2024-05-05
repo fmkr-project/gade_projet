@@ -27,6 +27,8 @@ class ConcreteCreatureFactory : CreatureFactory
             
             6 => new C006(),
             7 => new C007(),
+            11 => new C011(),
+            12 => new C012(),
             
             _ => new C000()
         };
