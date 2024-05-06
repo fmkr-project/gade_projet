@@ -17,6 +17,8 @@ namespace Creatures
             Speed = 5;
 
             Types = new List<Type> {Type.NeutralType};
+
+            CatchRate = 0;
         }
     }
 }

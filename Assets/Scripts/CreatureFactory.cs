@@ -27,6 +27,9 @@ class ConcreteCreatureFactory : CreatureFactory
             
             6 => new C006(),
             7 => new C007(),
+            11 => new C011(),
+            12 => new C012(),
+            13 => new C013(),
             
             _ => new C000()
         };
@@ -76,7 +79,10 @@ class ConcreteCreatureFactory : CreatureFactory
                 break;
             }
         }
-        
+
+        if (_data.CatchRate == 0)
+            Debug.LogWarning("Mons should not have a 0 catch rate (makes them uncatchable)");
+        final.CatchRate = _data.CatchRate;
         
         // IV calculation. cf Bulbapedia
         var hpIV = Random.Range(0, 32);
@@ -95,8 +101,6 @@ class ConcreteCreatureFactory : CreatureFactory
                                   $"of distribution: {final.MaxHp} {final.Attack} {final.Defense} {final.Speed} " +
                                   $"and with {final.Attacks.Count} attacks");
         }
-
-        Debug.Log(final.Attacks[0]);
 
         return final;
         

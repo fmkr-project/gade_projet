@@ -70,8 +70,6 @@ namespace UI
             _actionBoxArrow = transform.Find("Canvas/ActionBoxArrow").GetComponent<BattleActionBoxArrow>();
             _attackBoxArrow = transform.Find("Canvas/AttackBoxArrow").GetComponent<BattleAttackBoxArrow>();
             _attackBoxArrow.gameObject.SetActive(false);
-            
-            Debug.Log(GameInformation.PlayerPosition);
         }
 
         public void FetchMonsInfo(Creature player, Creature enemy)
@@ -164,6 +162,11 @@ namespace UI
             }
         }
 
+        public bool ActionMenuIsOpen()
+        {
+            return _actionBox.gameObject.activeSelf;
+        }
+
         public string ActionGetChoice()
         {
             return _actionBoxArrow.ReturnChoice();
@@ -174,6 +177,12 @@ namespace UI
             yield return _fader.FadeOut(FadeTime);
             
             SceneManager.LoadScene("Overworld");
+        }
+
+        public IEnumerator ActionGameOver()
+        {
+            yield return _fader.FadeOut(FadeTime);
+            SceneManager.LoadScene("GameOver");
         }
         
         // Attack box
