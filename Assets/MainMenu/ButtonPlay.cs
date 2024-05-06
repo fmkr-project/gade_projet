@@ -6,16 +6,17 @@ public class BoutonPlay : MonoBehaviour
 {
     // Référence au bouton
     public Button bouton;
+    public string scene;
 
     void Start()
     {
         // Ajoutez un écouteur d'événements pour le clic sur le bouton
-        bouton.onClick.AddListener(JouerOverworld);
+        bouton.onClick.AddListener(JouerScene);
     }
 
-    void JouerOverworld()
+    void JouerScene()
     {
         // Charger la scène "Overworld"
-        SceneManager.LoadScene("Overworld");
+        SceneManager.LoadScene(scene);
     }
 }

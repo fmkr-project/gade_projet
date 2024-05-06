@@ -7,11 +7,14 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Scenes/Overworld.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
+    guid: 63276ab6c39c3e146a06c3b36b200bc7
   - enabled: 1
     path: Assets/Scenes/BattleScene.unity
     guid: 010e750231d329346843b0cadaab7528
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/GameOver.unity
     guid: b9b69cc8eb5e6ca45971a6da6e257d04
+  - enabled: 1
+    path: Assets/Scenes/MainScreen.unity
+    guid: 5f319a65583e3fa4283e33109a61909f
   m_configObjects: {}
