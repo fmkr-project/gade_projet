@@ -11,12 +11,15 @@ public class SceneTransition : MonoBehaviour
     public Light directionalLight;
     public bool isMovable = true;
     private Camera _camera;
+
+    private OverworldAudioManager _audioManager;
     
     public bool isTransitioning;
 
     private void Awake()
     {
         _camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        _audioManager = FindObjectOfType<OverworldAudioManager>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -38,7 +41,8 @@ public class SceneTransition : MonoBehaviour
             isMovable = false;
             GameInformation.SetPosition(transform.position);
             GameInformation.SetCameraPosition(_camera.transform.position);
-            Debug.Log(GameInformation.PlayerPosition);
+
+            _audioManager.StartBattle();
             StartCoroutine(FadeLightAndLoadScene());
             
         }

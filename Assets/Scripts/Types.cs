@@ -7,9 +7,11 @@ public enum Type
     Fire,
     Water,
     Grass,
+    Electr,
+    Ice,
     
-    Ground
-    // todo types ++
+    Ground,
+    Psychic
 }
 
 public class TypeToString
@@ -24,7 +26,11 @@ public class TypeToString
             case Type.Water: return "EAU";
             case Type.Grass: return "HERBE";
             
+            case Type.Electr: return "ELECTRIK";
+            case Type.Ice: return "GLACE";
+            
             case Type.Ground: return "SOL";
+            case Type.Psychic: return "PSY";
             default: return "/";
         }
     }
@@ -41,11 +47,15 @@ public class TypeChart
             
             {Type.Normal, new List<Type>()},
             
-            {Type.Fire, new List<Type> {Type.Water}},
-            {Type.Water, new List<Type> {Type.Grass}},
-            {Type.Grass, new List<Type> {Type.Fire}},
+            {Type.Fire, new List<Type> {Type.Water, Type.Ground}},
+            {Type.Water, new List<Type> {Type.Grass, Type.Electr}},
+            {Type.Grass, new List<Type> {Type.Fire, Type.Ice}},
+
+            {Type.Electr, new List<Type> {Type.Ground}},
+            {Type.Ice, new List<Type> {Type.Fire}},
             
-            {Type.Ground, new List<Type> {Type.Water, Type.Grass}}
+            {Type.Ground, new List<Type> {Type.Water, Type.Grass, Type.Ice}},
+            {Type.Psychic, new List<Type> {}}
         };
 
     public readonly Dictionary<Type, List<Type>> StrongAgainst
@@ -55,11 +65,14 @@ public class TypeChart
             
             {Type.Normal, new List<Type>()},
 
-            {Type.Fire, new List<Type> {Type.Grass}},
-            {Type.Water, new List<Type> {Type.Fire}},
-            {Type.Grass, new List<Type> {Type.Grass}},
+            {Type.Fire, new List<Type> {Type.Fire, Type.Grass, Type.Ice}},
+            {Type.Water, new List<Type> {Type.Fire, Type.Water, Type.Ice}},
+            {Type.Grass, new List<Type> {Type.Water, Type.Grass, Type.Electr, Type.Ground}},
+
+            {Type.Electr, new List<Type> {Type.Electr}},
             
-            {Type.Ground, new List<Type> {}}
+            {Type.Ground, new List<Type> {}},
+            {Type.Psychic, new List<Type> {Type.Psychic}}
         };
 
     public readonly Dictionary<Type, List<Type>> ImmuneAgainst
@@ -72,7 +85,10 @@ public class TypeChart
             {Type.Fire, new List<Type>()},
             {Type.Water, new List<Type>()},
             {Type.Grass, new List<Type>()},
+
+            {Type.Electr, new List<Type>()},
             
-            {Type.Ground, new List<Type> {}}
+            {Type.Ground, new List<Type> {Type.Electr}},
+            {Type.Psychic, new List<Type> {}}
         };
 }

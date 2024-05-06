@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/MainScreen.unity
+    guid: 5f319a65583e3fa4283e33109a61909f
+  - enabled: 1
     path: Assets/Scenes/Overworld.unity
     guid: 63276ab6c39c3e146a06c3b36b200bc7
   - enabled: 1
@@ -15,9 +18,7 @@ EditorBuildSettings:
     path: Assets/Scenes/GameOver.unity
     guid: b9b69cc8eb5e6ca45971a6da6e257d04
   - enabled: 1
-    path: Assets/Scenes/MainScreen.unity
-    guid: 5f319a65583e3fa4283e33109a61909f
-  - enabled: 1
     path: Assets/Scenes/Tutorial.unity
     guid: d31ca59fcb61e9f4e94b5d23d772abfa
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 3fc6a5723e093ec4ab13b2e7cfc84fea, type: 2}

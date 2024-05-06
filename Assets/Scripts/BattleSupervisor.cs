@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UI;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -9,6 +10,8 @@ public class BattleSupervisor : MonoBehaviour
 {
     private BattleUIManager _uiManager;
 
+    private BattleAudioManager _battleAudio;
+    
     private bool _willFlee;
     
     // Battle internals
@@ -54,6 +57,7 @@ public class BattleSupervisor : MonoBehaviour
     {
         _uiManager = transform.Find("/UIManager").GetComponent<BattleUIManager>();
         _index = GameInformation.GetBattleReadyCreatureIndex();
+        _battleAudio = FindObjectOfType<BattleAudioManager>();
     }
 
     
@@ -278,6 +282,7 @@ public class BattleSupervisor : MonoBehaviour
                         _chosenAttack = _uiManager.AttackGetMonAttack(PlayerMon);
                         print(_uiManager.AttackGetChoice());
                         _uiManager.AttackCloseMenu();
+                        _uiManager.ActionCloseMenu();
                         _readyForBattle = true;
                         return;
                 }
@@ -547,6 +552,8 @@ public class BattleSupervisor : MonoBehaviour
         while (_uiManager.HasDialogueOnScreen())
             yield return new WaitForSeconds(Time.deltaTime);
 
+        _battleAudio.AttackEffect();
+        
         var elapsed = 0f;
         while (elapsed < BonkDuration / 2)
         {
@@ -595,6 +602,7 @@ public class BattleSupervisor : MonoBehaviour
         _uiManager.FetchMonsInfo(PlayerMon, EnemyMon);
         _uiManager.InitializeMonsInfo();
         _uiManager.LoadPlayerMonPrompt(PlayerMon);
+        _uiManager.AttackInitializeDraw(PlayerMon);
         while (_uiManager.HasDialogueOnScreen())
             yield return new WaitForSeconds(Time.deltaTime);
         StartCoroutine(Spawn(PlayerObject));
@@ -697,6 +705,7 @@ public class BattleSupervisor : MonoBehaviour
         // Begin death animation
         _uiManager.NewDialogue($"{PlayerMon.Nickname}\nest K.O. !");
 
+        _battleAudio.DeathEffect();
         StartCoroutine(Despawn(PlayerObject));
         
         // Don't advance until the dialogue is closed
@@ -729,6 +738,7 @@ public class BattleSupervisor : MonoBehaviour
         _uiManager.FetchMonsInfo(PlayerMon, EnemyMon);
         _uiManager.InitializeMonsInfo();
         _uiManager.LoadPlayerMonPrompt(PlayerMon);
+        _uiManager.AttackInitializeDraw(PlayerMon);
 
         _monChangeForced = true;
         _checkDie = false;
@@ -749,6 +759,7 @@ public class BattleSupervisor : MonoBehaviour
             : "Le ";
         _uiManager.NewDialogue($"{determinant}{EnemyMon.Nickname} ennemi\nest K.O. !");
 
+        _battleAudio.DeathEffect();
         StartCoroutine(Despawn(EnemyObject));
         
         // Don't advance until the dialogue is closed
@@ -756,8 +767,10 @@ public class BattleSupervisor : MonoBehaviour
             yield return new WaitForSeconds(Time.deltaTime);
 
         _checkDie = false;
-
-        _uiManager.NewDialogue("Object event.");
+        
+        // The enemy drops loot -> add to bag
+        EnemyMon.DropLoot();
+        
         StartCoroutine(_uiManager.ActionFlee());
         _battleWon = true;
         
@@ -809,6 +822,8 @@ public class BattleSupervisor : MonoBehaviour
         // Don't advance until the dialogue is closed
         while (_uiManager.HasDialogueOnScreen())
             yield return new WaitForSeconds(Time.deltaTime);
+
+        _battleAudio.AttackEffect();
         
         var elapsed = 0f;
         while (elapsed < BonkDuration / 2)
@@ -870,6 +885,11 @@ public class BattleSupervisor : MonoBehaviour
             
             // Stats modifiers dialogues
             var hitMon = attack.Target == StatusAttackTarget.Enemy ? target : source;
+            if (hitMon == PlayerMon && PlayerMon.CurrentHp > 0 && PlayerMon.CurrentHp < 0.2f * PlayerMon.MaxHp)
+            {
+                // Play a sound effect on low health
+                _battleAudio.LowHealthEffect();
+            }
             var stringHead = new List<char> {'a', 'e', 'i', 'o', 'u'}.Contains(EnemyMon.Nickname[0])
                 ? hitMon == PlayerMon ? $"d'{PlayerMon.Nickname}" : $"de l'{EnemyMon.Nickname} ennemi"
                 : hitMon == PlayerMon ? $"de {PlayerMon.Nickname}" : $"du {EnemyMon.Nickname} ennemi";

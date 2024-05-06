@@ -58,7 +58,7 @@ public class PlayerMover : MonoBehaviour
         }
         else
         {
-            _animator.Play("Idle 0");
+            //_animator.Play("Idle 0");
         }
     }
 }

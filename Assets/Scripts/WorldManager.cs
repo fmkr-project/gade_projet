@@ -33,9 +33,10 @@ public class WorldManager : MonoBehaviour
         {
             _isSpawning = true;
             var newCreatureId = _currentZone.GetSpawnedCreatureById("Grass");
+            Debug.Log($"Encountering {newCreatureId}");
             // TODO use other spawn types : Cavern, TallGrass...
             // TODO level ranges
-            var newCreature = new ConcreteCreatureFactory().GenerateCreature(newCreatureId, 10);
+            var newCreature = new ConcreteCreatureFactory().GenerateCreature(newCreatureId, 50);
             GameInformation.SetData(newCreature);
             
             //foreach (var kvp in GameInformation.squad.Monsters)

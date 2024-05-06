@@ -8,6 +8,8 @@ namespace Attacks
             Type = Type.Normal;
             Power = 60;
             Accuracy = CannotMiss;
+
+            Desc = "Ne rate pas";
         }
     }
 }

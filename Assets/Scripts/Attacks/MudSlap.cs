@@ -9,6 +9,8 @@ namespace Attacks
             Power = 20;
             Accuracy = 100;
 
+            Desc = "Ennemi PRC -1";
+            
             Target = StatusAttackTarget.Enemy;
             AccuracyBuff = -1;
         }

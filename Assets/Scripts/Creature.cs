@@ -156,4 +156,14 @@ public class Creature
         EvasionBuff = 0;
     }
 
+    public void DropLoot()
+    // Return a list of items dropped by the creature.
+    // Custom made formula for amount of dropped items
+    {
+        var nbItems = (int) Math.Ceiling((Attack + Defense + Speed) / 100f);
+        for (var i = 0; i < nbItems; i++)
+        {
+            GameInformation.Bag.StoreItem(ObjectRarities.GenerateObject());
+        }
+    }
 }

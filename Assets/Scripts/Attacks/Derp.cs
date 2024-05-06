@@ -8,6 +8,8 @@ namespace Attacks
             Type = Type.NeutralType;
             Power = OHKO;
             Accuracy = CannotMiss;
+
+            Desc = "derpy derp";
         }
     }
 }

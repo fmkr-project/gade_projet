@@ -7,14 +7,14 @@ public class Player : MonoBehaviour
 {
     
    
-    [NonSerialized] public int Money;
+    [NonSerialized] public int Money; // todo
 
     private void Awake()
     {
         // debug
         // Initialize the bag if there is nothing in it
         // TODO improve this
-        if (GameInformation.Bag.PrintedContents.Count == 0)
+        /*if (GameInformation.Bag.PrintedContents.Count == 0)
         {
             GameInformation.Bag.StoreItem(new Objects.ClassicOrb());
             GameInformation.Bag.StoreItem(new Objects.ClassicOrb());
@@ -23,7 +23,7 @@ public class Player : MonoBehaviour
             GameInformation.Bag.StoreItem(new Objects.BetterOrb());
             GameInformation.Bag.StoreItem(new Objects.Potion());
             GameInformation.Bag.StoreItem(new Objects.Potion());
-        }
+        }*/
 
         Debug.Log(GameInformation.Bag.PrintedContents);
         foreach (var kvp in GameInformation.Bag.PrintedContents)

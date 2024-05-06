@@ -5,8 +5,8 @@ namespace Objects
         public SuperPotion()
         {
             Name = "POTION MIEUX";
-            Description = "Potion de soin (50 PV)";
-            HealedHp = 20;
+            Description = "Potion de soin (100 PV)";
+            HealedHp = 1000;
         }
     }
 }

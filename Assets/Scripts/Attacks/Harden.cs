@@ -8,6 +8,8 @@ namespace Attacks
             Type = Type.Normal;
             Accuracy = 100;
 
+            Desc = "DEF +1";
+            
             Target = StatusAttackTarget.User;
             DefenseBuff = +1;
         }
