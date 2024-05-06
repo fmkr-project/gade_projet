@@ -12,7 +12,7 @@ public class PlayerMover : MonoBehaviour
     private NavMeshAgent _agent;
     private SceneTransition _sceneTransition;
     private OverworldMenus _menus;
-    private Animator _animator; // Ajoutez une variable pour l'Animator
+    public Animator _animator; 
     
     // Start is called before the first frame update
     void Awake()
@@ -20,21 +20,16 @@ public class PlayerMover : MonoBehaviour
         _sceneTransition = GetComponent<SceneTransition>();
         _agent = GetComponent<NavMeshAgent>();
         _menus = FindObjectOfType<OverworldMenus>();
-        _animator = GetComponent<Animator>(); // Attribuer la référence à l'Animator
+        _animator = GetComponent<Animator>(); 
         
         
     }
-
-    private void Start()
-    {
-        _animator.Play("Idle 0");
-    }
-
     // Update is called once per frame
     void Update()
     {
         if (_sceneTransition.isMovable && _menus.Focus is null)
         {
+           
             Debug.Log(_agent.velocity.magnitude);
             var deltaTime = Time.deltaTime;
             var horizontalMove = Input.GetAxis("Horizontal");
@@ -53,12 +48,9 @@ public class PlayerMover : MonoBehaviour
             }
             else
             {
-                _animator.SetBool("isMoving", false);// Assurez-vous que le trigger est réinitialisé lorsque le joueur ne se déplace pas
+                _animator.SetBool("isMoving", false);
             }
         }
-        else
-        {
-            _animator.Play("Idle 0");
-        }
+       
     }
 }
