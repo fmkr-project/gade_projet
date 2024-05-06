@@ -164,11 +164,6 @@ namespace UI
             }
         }
 
-        public bool ActionMenuIsOpen()
-        {
-            return _actionBox.gameObject.activeSelf;
-        }
-
         public string ActionGetChoice()
         {
             return _actionBoxArrow.ReturnChoice();
@@ -179,12 +174,6 @@ namespace UI
             yield return _fader.FadeOut(FadeTime);
             
             SceneManager.LoadScene("Overworld");
-        }
-
-        public IEnumerator ActionGameOver()
-        {
-            yield return _fader.FadeOut(FadeTime);
-            SceneManager.LoadScene("GameOver");
         }
         
         // Attack box

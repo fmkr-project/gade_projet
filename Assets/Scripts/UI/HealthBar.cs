@@ -87,8 +87,7 @@ namespace UI
                 yield return new WaitForSeconds(deltaTime);
                 elapsed += deltaTime;
             }
-            
-            _fg.anchorMax = new Vector2((float) displayedHp / TrackedCreature.MaxHp, 1);
+
             if (_hpText is not null) _hpText.text = $"{displayedHp} / {TrackedCreature.MaxHp}";
             _oldDisplayedHp = displayedHp;
         }

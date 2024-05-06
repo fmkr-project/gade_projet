@@ -4,8 +4,8 @@ namespace Objects
     {
         public BetterOrb()
         {
-            Name = "ORBE MIEUX";
-            Description = "Une orbe de meilleure qualité que l'ORBE USUELLE.";
+            Name = "fjeoifjoierjfoczekp";
+            Description = "TODO";
             CaptureMultiplier = 1.5f;
         }
     }

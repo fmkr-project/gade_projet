@@ -7,10 +7,9 @@ namespace Zones.Route1
         public override Dictionary<float, int> Data =>
             new()
             {
-                /*{0.6f, 001},
+                {0.6f, 001},
                 {0.3f, 006},
-                {0.1f, 007}*/
-                {1f, 012}
+                {0.1f, 007}
             };
     }
 }

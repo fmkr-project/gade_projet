@@ -27,14 +27,16 @@ public class PlayerMover : MonoBehaviour
 
     private void Start()
     {
-        _animator.Play("Idle 0");
+        _animator.Play("Idle");
     }
 
     // Update is called once per frame
     void Update()
     {
+        
         if (_sceneTransition.isMovable && _menus.Focus is null)
         {
+            _animator.SetBool("isMoving", true);
             Debug.Log(_agent.velocity.magnitude);
             var deltaTime = Time.deltaTime;
             var horizontalMove = Input.GetAxis("Horizontal");
@@ -42,6 +44,7 @@ public class PlayerMover : MonoBehaviour
 
             var finalSpeed = Input.GetAxis("Sprint") != 0 ? sprintSpeed : walkingSpeed;
             _agent.speed = finalSpeed;
+            
 
             var displacement = Vector3.forward * verticalMove + Vector3.right * horizontalMove;
             _agent.SetDestination(transform.position + displacement);
@@ -58,7 +61,7 @@ public class PlayerMover : MonoBehaviour
         }
         else
         {
-            _animator.Play("Idle 0");
+            _animator.Play("Idle");
         }
     }
 }

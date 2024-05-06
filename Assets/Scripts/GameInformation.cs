@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public static class GameInformation
+public class GameInformation
 {
     public static Creature Data;
     public static Vector3 PlayerPosition = new Vector3(50.0f, 0.0f, 50.0f);

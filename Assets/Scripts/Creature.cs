@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using Random = UnityEngine.Random;
 
 [Serializable]
@@ -25,8 +24,6 @@ public class Creature
     [NonSerialized] public int AccuracyBuff;
     [NonSerialized] public int CriticalBuff;
 
-    [NonSerialized] public int CatchRate;
-
     private void ModifyHp(int hp)
     {
         CurrentHp = Math.Min(CurrentHp + hp, MaxHp);
@@ -41,15 +38,9 @@ public class Creature
     
     // Attacks related
     public float ReceiveAttack(Attack attack, Creature attacker)
-    // Calculate damage done by an attack / status alts
+    // Calculate damage done by an attack
     // Cf Bulbapedia article. Using Gen III formula
     {
-        if (attack.Power == 0)
-        {
-            // Status attack logic
-
-            return 1;
-        }
         var typeEfficiency = new TypeEfficiency();
         
         var baseDamage = 2 + (2 + 2 * attacker.Level / 5) * attack.Power * (attacker.Attack / Defense) / 50;
@@ -65,6 +56,11 @@ public class Creature
         ModifyHp(-lostHp);
         
         UnityEngine.Debug.Log($"{Nickname} now has {CurrentHp} / {MaxHp} HP");
+        
+        if (this.IsDead())
+        {
+            // todo
+        }
 
         return effectiveness;
     }
@@ -87,19 +83,11 @@ public class Creature
     public float GetModifiedCatchRate(CaptureOrb ball)
     // Cf Bulbapedia
     {
-        var baseValue = (float) (3.0 * MaxHp - 2 * CurrentHp) / (3 * MaxHp);
+        var baseValue = 1 - 2 * CurrentHp / 3 / MaxHp;
+        var creatureCatchRate = 1f; // TODO plusieurs valeurs
         var ballBonus = ball.CaptureMultiplier;
-        
-        return baseValue * CatchRate * ballBonus;
-    }
 
-    public void ResetStatusAlterations()
-    {
-        AttackBuff = 0;
-        DefenseBuff = 0;
-        CriticalBuff = 0;
-        SpeedBuff = 0;
-        AccuracyBuff = 0;
+        return baseValue * creatureCatchRate * ballBonus;
     }
 
 }
