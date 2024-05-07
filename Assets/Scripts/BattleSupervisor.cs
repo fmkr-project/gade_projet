@@ -213,6 +213,7 @@ public class BattleSupervisor : MonoBehaviour
                         _uiManager.ObjectCloseMenu();
                         break;
                     case "UTILISER":
+                        if (!GameInformation.Bag.CanUseItem(item)) return;
                         GameInformation.Bag.TossItem(item);
                         _uiManager.BagRedraw();
                         
