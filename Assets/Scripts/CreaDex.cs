@@ -29,13 +29,15 @@ public class Creadex : MonoBehaviour
     private void UpdateProgressBar()
     {
        
-        float progress = (float)encounteredCreatureIds.Count / 19f; 
+        float progress = (float)encounteredCreatureIds.Count / 18f;
+        
 
         // Mettre à jour la barre de progression en utilisant le script ProgressBar
         if (_progressBar != null)
         {
             _progressBar.SetProgress(progress);
         }
+        
     }
 
     
