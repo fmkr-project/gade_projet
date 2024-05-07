@@ -15756,7 +15756,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkingSpeed: 3.5
   sprintSpeed: 6
-  _animator: {fileID: 1660114111}
+  _animator: {fileID: 4540229000190281644, guid: 60770bdb4dc667c45bea53db0339dc05, type: 3}
 --- !u!114 &1660114106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15855,7 +15855,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1660114102}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 4c7fe8e1a3919c549a79a706afefd1ce, type: 2}
   m_CullingMode: 0
