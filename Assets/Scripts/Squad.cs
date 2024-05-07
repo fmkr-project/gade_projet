@@ -10,6 +10,7 @@ public class Squad
     {
         // TODO nicer introduction screen so that the player can choose a starting mon
         Monsters.Add(new ConcreteCreatureFactory().GenerateCreature(13, 50));
+        Monsters.Add(new ConcreteCreatureFactory().GenerateCreature(19, 50));
     }
     
     public (int, Creature) GetBattleReadyCreature()
