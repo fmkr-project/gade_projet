@@ -119,12 +119,13 @@ namespace UI
                 return;
             }
 
-            if (direction == 1 & ArrowPosition >= GameInformation.Squad.Monsters.Count) return;
+            if (direction == 1 & ArrowPosition < 5 && ArrowPosition >= GameInformation.Squad.Monsters.Count - 1)
+                return;
 
             if (direction == 1 & ArrowPosition >= 5)
                 // at this point there are more than 6 creatures in the inventory
             {
-                if (_firstDisplayedIndex > GameInformation.Squad.Monsters.Count - 6) return;
+                if (_firstDisplayedIndex >= GameInformation.Squad.Monsters.Count - 6) return;
                 _firstDisplayedIndex++;
                 Redraw();
                 return;
