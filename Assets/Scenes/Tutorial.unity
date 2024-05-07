@@ -2078,7 +2078,7 @@ MonoBehaviour:
   m_text: "Les contr\xF4les : \r\nUtilisez Z,Q,S,D ou les fl\xE8ches directionnelles
     pour d\xE9placer votre personnage sur la carte.\r\nUtilisez Espace pour ouvrir
     le menu auxiliaire.\r\nDans ce menu, utilisez Entrer pour confirmer la s\xE9lection
-    du sous-menu.\r\n"
+    du sous-menu.\r Utilisez BackSpace pour revenir en arri\xE8re.\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 46311abc3b6a3f74b82fcfb864d6dcfe, type: 2}
   m_sharedMaterial: {fileID: 6549594841805033885, guid: 46311abc3b6a3f74b82fcfb864d6dcfe, type: 2}
