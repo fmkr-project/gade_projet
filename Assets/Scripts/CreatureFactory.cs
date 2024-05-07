@@ -41,6 +41,7 @@ class ConcreteCreatureFactory : CreatureFactory
             16 => new C016(),
             17 => new C017(),
             18 => new C018(),
+            19 => new C019(),
             
             _ => new C000()
         };

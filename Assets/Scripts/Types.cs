@@ -55,7 +55,7 @@ public class TypeChart
 
             {Type.Flying, new List<Type> {Type.Electr, Type.Ice}},
             {Type.Electr, new List<Type> {Type.Ground}},
-            {Type.Ice, new List<Type> {Type.Fire}},
+            {Type.Ice, new List<Type> {Type.Fire, Type.Steel}},
             
             {Type.Ground, new List<Type> {Type.Water, Type.Grass, Type.Ice}},
             {Type.Psychic, new List<Type> {}},
@@ -75,6 +75,7 @@ public class TypeChart
 
             {Type.Flying, new List<Type> {Type.Grass}},
             {Type.Electr, new List<Type> {Type.Electr}},
+            {Type.Ice, new List<Type> {Type.Ice}},
             
             {Type.Ground, new List<Type> {}},
             {Type.Psychic, new List<Type> {Type.Psychic}},
@@ -95,6 +96,7 @@ public class TypeChart
 
             {Type.Flying, new List<Type> {Type.Ground}},
             {Type.Electr, new List<Type>()},
+            {Type.Ice, new List<Type> {}},
             
             {Type.Ground, new List<Type> {Type.Electr}},
             {Type.Psychic, new List<Type> {}},
