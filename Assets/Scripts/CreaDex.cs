@@ -8,7 +8,7 @@ public class Creadex : MonoBehaviour
 
     private void Start()
     {
-        // Obtenez la liste de créatures de la squad dans GameInformation et passez-la à CheckSquad
+       
         CheckSquad(GameInformation.Squad.Monsters);
         
     }
@@ -28,8 +28,8 @@ public class Creadex : MonoBehaviour
 
     private void UpdateProgressBar()
     {
-        // Calculer le pourcentage de créatures rencontrées par rapport au total
-        float progress = (float)encounteredCreatureIds.Count / 18f; // 18 est le nombre total de créatures
+       
+        float progress = (float)encounteredCreatureIds.Count / 19f; 
 
         // Mettre à jour la barre de progression en utilisant le script ProgressBar
         if (_progressBar != null)
@@ -38,6 +38,5 @@ public class Creadex : MonoBehaviour
         }
     }
 
-
-    // Autres méthodes de gestion du Pokédex
+    
 }
