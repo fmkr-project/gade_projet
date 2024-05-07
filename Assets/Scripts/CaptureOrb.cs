@@ -7,7 +7,7 @@ using Random = System.Random;
 public record CaptureOrb : Item
 {
     public float CaptureMultiplier;
-
+    
     public override bool Use()
     {
         return false;
@@ -32,6 +32,7 @@ public record CaptureOrb : Item
                 return res;
             }
             res.Add(true);
+           
             //System.Threading.Thread.Sleep(800); // Visual wait
         }
         
