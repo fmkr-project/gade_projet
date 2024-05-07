@@ -7,32 +7,34 @@ public enum Type
     Fire,
     Water,
     Grass,
+    Flying,
     Electr,
     Ice,
     
     Ground,
-    Psychic
+    Psychic,
+    Steel
 }
 
-public class TypeToString
+public static class TypeToString
 {
     public static string Convert(Type type)
     {
-        switch (type)
+        return type switch
         {
-            case Type.NeutralType: return "???";
-            case Type.Normal: return "NORMAL";
-            case Type.Fire: return "FEU";
-            case Type.Water: return "EAU";
-            case Type.Grass: return "HERBE";
-            
-            case Type.Electr: return "ELECTRIK";
-            case Type.Ice: return "GLACE";
-            
-            case Type.Ground: return "SOL";
-            case Type.Psychic: return "PSY";
-            default: return "/";
-        }
+            Type.NeutralType => "???",
+            Type.Normal => "NORMAL",
+            Type.Fire => "FEU",
+            Type.Water => "EAU",
+            Type.Grass => "HERBE",
+            Type.Flying => "VOL",
+            Type.Electr => "ELECTRIK",
+            Type.Ice => "GLACE",
+            Type.Ground => "SOL",
+            Type.Psychic => "PSY",
+            Type.Steel => "ACIER",
+            _ => "/"
+        };
     }
 }
 
@@ -51,11 +53,13 @@ public class TypeChart
             {Type.Water, new List<Type> {Type.Grass, Type.Electr}},
             {Type.Grass, new List<Type> {Type.Fire, Type.Ice}},
 
+            {Type.Flying, new List<Type> {Type.Electr, Type.Ice}},
             {Type.Electr, new List<Type> {Type.Ground}},
             {Type.Ice, new List<Type> {Type.Fire}},
             
             {Type.Ground, new List<Type> {Type.Water, Type.Grass, Type.Ice}},
-            {Type.Psychic, new List<Type> {}}
+            {Type.Psychic, new List<Type> {}},
+            {Type.Steel, new List<Type> {Type.Fire, Type.Ground}}
         };
 
     public readonly Dictionary<Type, List<Type>> StrongAgainst
@@ -69,10 +73,13 @@ public class TypeChart
             {Type.Water, new List<Type> {Type.Fire, Type.Water, Type.Ice}},
             {Type.Grass, new List<Type> {Type.Water, Type.Grass, Type.Electr, Type.Ground}},
 
+            {Type.Flying, new List<Type> {Type.Grass}},
             {Type.Electr, new List<Type> {Type.Electr}},
             
             {Type.Ground, new List<Type> {}},
-            {Type.Psychic, new List<Type> {Type.Psychic}}
+            {Type.Psychic, new List<Type> {Type.Psychic}},
+            {Type.Steel, new List<Type> {Type.Normal, Type.Flying, Type.Steel, Type.Grass, Type.Psychic, Type.Ice}
+        }
         };
 
     public readonly Dictionary<Type, List<Type>> ImmuneAgainst
@@ -86,9 +93,11 @@ public class TypeChart
             {Type.Water, new List<Type>()},
             {Type.Grass, new List<Type>()},
 
+            {Type.Flying, new List<Type> {Type.Ground}},
             {Type.Electr, new List<Type>()},
             
             {Type.Ground, new List<Type> {Type.Electr}},
-            {Type.Psychic, new List<Type> {}}
+            {Type.Psychic, new List<Type> {}},
+            {Type.Steel, new List<Type> {}}
         };
 }

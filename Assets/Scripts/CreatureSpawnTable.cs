@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public class CreatureSpawnTable
 {
@@ -8,7 +9,8 @@ public class CreatureSpawnTable
     public int GetRandomCreature()
         // Selects a random creature to spawn
     {
-        var rand = (float) new Random().NextDouble();
+        var rand = (float) new Random().NextDouble() *
+                   Data.Aggregate(0f, (acc, key) => acc + key.Key);
         var spawned = 0;
         var sum = 0f;
 
@@ -18,7 +20,7 @@ public class CreatureSpawnTable
             spawned = couple.Value;
             if (rand < sum) break;
         }
-        // assert: sum == 1
+        
         return spawned;
     }
 }
