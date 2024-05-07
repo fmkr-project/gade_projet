@@ -16,12 +16,12 @@ public class Try : MonoBehaviour
     {
         if (PlayerMover.change)
         {
-            Debug.Log("Ca y est ca marche");
+            //Debug.Log("Ca y est ca marche");
             _animator2.SetBool("isMoving", true);
         }
         if (!PlayerMover.change)
         {
-            Debug.Log("Ca y est ca remarche");
+            //Debug.Log("Ca y est ca remarche");
             _animator2.SetBool("isMoving", false);
         }
 }

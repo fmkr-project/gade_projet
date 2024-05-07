@@ -32,7 +32,7 @@ public class PlayerMover : MonoBehaviour
         if (_sceneTransition.isMovable && _menus.Focus is null)
         {
            
-            Debug.Log(_agent.hasPath);
+            //Debug.Log(_agent.hasPath);
             var deltaTime = Time.deltaTime;
             var horizontalMove = Input.GetAxis("Horizontal");
             var verticalMove = Input.GetAxis("Vertical");
