@@ -1805,8 +1805,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "Le jeu : \r\nVotre objectif est de capturer toutes les cr\xE9atures disponibles
-    pour remplir le creaDex. Maintenant que vous savez tout cela, il est temps de
-    se lancer dans votre grande aventure !\r\n"
+    pour remplir le creaDex en haut de l'\xE9cran. Pour cela, capturez tous les diff\xE9rents
+    pokemons. Maintenant que vous savez tout cela, il est temps de se lancer dans
+    votre grande aventure !\r\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 46311abc3b6a3f74b82fcfb864d6dcfe, type: 2}
   m_sharedMaterial: {fileID: 6549594841805033885, guid: 46311abc3b6a3f74b82fcfb864d6dcfe, type: 2}
@@ -2211,12 +2212,13 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Chaque cr\xE9ature a un certain nombre de points de vie. Lorsqu\u2019ils
-    sont r\xE9duits \xE0 0, la cr\xE9ature est tu\xE9e. S\u2019il s\u2019agit de
-    la cr\xE9ature adverse, vous recevrez en r\xE9compenses des objets al\xE9atoires.
-    S\u2019il s\u2019agit de la votre, une autre de votre cr\xE9ature prendra sa
-    place et le combat continuera.\r\nAttention, s\u2019il s\u2019agit de votre derni\xE8re
-    cr\xE9ature, la partie s\u2019arretera et vous aurez perdu."
+  m_text: "Le combat : les points de vie\nChaque cr\xE9ature a un certain nombre
+    de points de vie. Lorsqu\u2019ils sont r\xE9duits \xE0 0, la cr\xE9ature est
+    tu\xE9e. S\u2019il s\u2019agit de la cr\xE9ature adverse, vous recevrez en r\xE9compenses
+    des objets al\xE9atoires. S\u2019il s\u2019agit de la votre, une autre de votre
+    cr\xE9ature prendra sa place et le combat continuera.\r\nAttention, s\u2019il
+    s\u2019agit de votre derni\xE8re cr\xE9ature, la partie s\u2019arretera et vous
+    aurez perdu."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 46311abc3b6a3f74b82fcfb864d6dcfe, type: 2}
   m_sharedMaterial: {fileID: 6549594841805033885, guid: 46311abc3b6a3f74b82fcfb864d6dcfe, type: 2}
